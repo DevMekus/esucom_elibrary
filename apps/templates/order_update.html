@@ -1,0 +1,205 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Order Update - {{site_name}}</title>
+  </head>
+
+  <body style="margin: 0; padding: 0; background-color: #f6f6f6">
+    <!-- START: Preheader -->
+    <div
+      style="
+        display: none;
+        max-height: 0;
+        overflow: hidden;
+        mso-hide: all;
+        font-size: 1px;
+        line-height: 1px;
+        color: #f6f6f6;
+      "
+    >
+      Update on your order {{order_number}} – current status: {{order_status}}
+    </div>
+    <!-- END: Preheader -->
+
+    <table
+      role="presentation"
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      width="100%"
+      style="background-color: #f6f6f6"
+    >
+      <tr>
+        <td align="center" style="padding: 24px 12px">
+          <!-- Container -->
+          <table
+            role="presentation"
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="600"
+            style="
+              max-width: 600px;
+              width: 100%;
+              background-color: #ffffff;
+              border-radius: 8px;
+            "
+          >
+            <!-- START: Header -->
+            <tr>
+              <td
+                align="center"
+                style="background-color: #d51d28; padding: 20px 24px"
+              >
+                <img
+                  src="{{logo_url}}"
+                  width="140"
+                  height="40"
+                  alt="{{site_name}} logo"
+                  style="
+                    display: block;
+                    width: 140px;
+                    height: 40px;
+                    object-fit: contain;
+                  "
+                />
+              </td>
+            </tr>
+            <!-- END: Header -->
+
+            <!-- START: Hero -->
+            <tr>
+              <td
+                align="left"
+                style="
+                  padding: 28px 28px 12px 28px;
+                  font-family: Arial, Helvetica, sans-serif;
+                "
+              >
+                <h1
+                  style="
+                    margin: 0;
+                    font-size: 22px;
+                    line-height: 1.3;
+                    color: #1c2a48;
+                  "
+                >
+                  Order Update for {{user_name}}
+                </h1>
+              </td>
+            </tr>
+            <!-- END: Hero -->
+
+            <!-- START: Content -->
+            <tr>
+              <td
+                align="left"
+                style="
+                  padding: 0 28px 8px 28px;
+                  font-family: Arial, Helvetica, sans-serif;
+                  font-size: 15px;
+                  line-height: 1.6;
+                  color: #444444;
+                "
+              >
+                <p style="margin: 0 0 12px 0">
+                  Your order <strong>{{order_number}}</strong> has been updated.
+                </p>
+                <p style="margin: 0 0 12px 0">
+                  <strong>Current Status:</strong>
+                  <span style="color: #0077b6">{{order_status}}</span>
+                </p>
+                <p style="margin: 0 0 0 0">
+                  You can track the progress of your order anytime using the
+                  button below.
+                </p>
+              </td>
+            </tr>
+            <!-- END: Content -->
+
+            <!-- START: CTA -->
+            <tr>
+              <td align="center" style="padding: 20px 28px 8px 28px">
+                <a
+                  href="{{tracking_link}}"
+                  style="
+                    background-color: #d51d28;
+                    color: #ffffff;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 16px;
+                    font-weight: bold;
+                    line-height: 48px;
+                    text-align: center;
+                    border-radius: 6px;
+                    width: 240px;
+                    height: 48px;
+                  "
+                  >Track My Order</a
+                >
+              </td>
+            </tr>
+            <tr>
+              <td
+                align="center"
+                style="
+                  padding: 0 28px 20px 28px;
+                  font-family: Arial, Helvetica, sans-serif;
+                  font-size: 13px;
+                  line-height: 1.6;
+                  color: #777777;
+                "
+              >
+                <p style="margin: 8px 0 0 0">
+                  Or copy & paste this link into your browser: <br />
+                  <a
+                    href="{{tracking_link}}"
+                    style="
+                      color: #0077b6;
+                      text-decoration: underline;
+                      word-break: break-all;
+                    "
+                    >{{tracking_link}}</a
+                  >
+                </p>
+                <p style="margin: 12px 0 0 0">
+                  Need help?
+                  <a
+                    href="mailto:{{support_email}}"
+                    style="color: #0077b6; text-decoration: underline"
+                    >Contact support</a
+                  >
+                </p>
+              </td>
+            </tr>
+            <!-- END: CTA -->
+
+            <!-- START: Footer -->
+            <tr>
+              <td
+                align="center"
+                style="
+                  background-color: #f6f6f6;
+                  padding: 20px 16px;
+                  font-family: Arial, Helvetica, sans-serif;
+                  font-size: 12px;
+                  line-height: 1.6;
+                  color: #777777;
+                  border-top: 1px solid #ececec;
+                "
+              >
+                <p style="margin: 0 0 8px 0">
+                  &copy; {{year}} {{site_name}}. All rights reserved.
+                </p>
+                <p style="margin: 0 0 8px 0">{{company_address}}</p>
+              </td>
+            </tr>
+            <!-- END: Footer -->
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

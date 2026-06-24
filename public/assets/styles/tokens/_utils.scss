@@ -1,0 +1,227 @@
+
+
+:root {
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.5rem; /* 24px */
+  --space-6: 2rem; /* 32px */
+  --space-8: 2.5rem; /* 40px */
+  --space-10: 3rem; /* 48px */
+  --container-max: 1200px;
+  --sidebar-max: 250px;
+  --glass: rgba(255, 255, 255, 0.03);
+  --card-radius: 14px;
+  --gap: 18px;
+  --pad: 18px;
+  --shadow: 0 8px 32px rgba(11, 110, 79, 0.08);
+  --btn-focus-outline: 0 0 0 3px rgba(59, 130, 246, 0.5);
+
+  --shadow: 0 4px 24px rgba(112,21,0,0.10);
+  --shadow-lg: 0 12px 48px rgba(112,21,0,0.16);
+  --shadow-md:0 6px 28px rgba(112,21,0,0.13);
+  --btn-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+
+  --nav-h: 72px;
+  --sidebar:256px;
+}
+
+
+// ==============================
+// Breakpoints
+// ==============================
+$break-sm: 576px;
+$break-md: 768px;
+$break-lg: 992px;
+$break-xl: 1200px;
+
+@mixin respond($break) {
+  @if $break == sm {
+    @media (min-width: #{$break-sm}) {
+      @content;
+    }
+  } @else if $break == md {
+    @media (min-width: #{$break-md}) {
+      @content;
+    }
+  } @else if $break == lg {
+    @media (min-width: #{$break-lg}) {
+      @content;
+    }
+  } @else if $break == xl {
+    @media (min-width: #{$break-xl}) {
+      @content;
+    }
+  }
+}
+
+// ==============================
+// Utility classes
+// ==============================
+// Margins & paddings
+@mixin space-utils($prop) {
+  @each $i,
+    $space
+      in (
+        1: var(--space-1),
+        2: var(--space-2),
+        3: var(--space-3),
+        4: var(--space-4),
+        5: var(--space-5),
+        6: var(--space-6)
+      )
+  {
+    .#{$prop}-#{$i} {
+      #{$prop}: #{$space};
+    }
+    .#{$prop}x-#{$i} {
+      #{$prop}-left: #{$space};
+      #{$prop}-right: #{$space};
+    }
+    .#{$prop}y-#{$i} {
+      #{$prop}-top: #{$space};
+      #{$prop}-bottom: #{$space};
+    }
+  }
+}
+
+@include space-utils(m);
+@include space-utils(p);
+
+
+// Text color utilities
+.text-primary {
+  color: var(--primary) !important;
+}
+.text-secondary {
+  color: var(--secondary) !important;
+}
+.text-accent {
+  color: var(--accent) !important;
+}
+.text-error {
+  color: var(--error) !important;
+}
+.text-info {
+  color: var(--info) !important;
+}
+
+//Background color utilities
+.bg-light {
+  background-color: var(--gray-50) !important;
+}
+
+.bg-light p,
+.bg-light h5,
+.bg-light span {
+  color: var(--text);
+}
+
+.bg-primary {
+  background-color: var(--primary) !important;
+}
+.bg-secondary {
+  background-color: var(--secondary) !important;
+}
+.bg-accent {
+  background-color: var(--accent) !important;
+}
+.bg-error {
+  background-color: var(--error) !important;
+}
+.bg-info {
+  background-color: var(--info) !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+.section-pad {
+  padding: 50px 0;
+}
+
+.section-title {
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.section-sub {
+  color: var(--muted);
+}
+
+.color-red {
+  color: red;
+}
+
+
+
+.muted {
+  color: var(--muted);
+
+}
+
+.small-text {
+  font-size: 0.85rem;
+}
+
+
+.toast {
+  background-color: var(--bg);
+}
+
+@media (max-width: 576px) {
+  #toastWrapper {
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 10px;
+    transform: none;
+  }
+
+  #liveToast {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+.fa-facebook {
+  color: var(--text-white);
+}
+.fa-instagram {
+  color: var(--text-white);
+}
+.fa-tiktok {
+  color: var(--text-white);
+}
+.fa-x-twitter {
+  color: var(--text-white);
+}
+.fa-google {
+  color: var(--text-white);
+}
+.fa-youtube {
+  color: var(--text-white);
+}
+
+.border-secondary-2x{
+  border: 2px solid var(--secondary) !important;
+}
+
+.border-secondary-1x{
+  border: 1px solid var(--secondary) !important;
+}
+
+
+.cursor-pointer{
+  cursor: pointer;
+}

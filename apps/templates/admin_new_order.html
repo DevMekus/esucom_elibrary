@@ -1,0 +1,184 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Order Notification - {{site_name}}</title>
+  </head>
+
+  <body style="margin: 0; padding: 0; background-color: #f6f6f6">
+    <!-- START: Preheader -->
+    <div
+      style="
+        display: none;
+        max-height: 0;
+        overflow: hidden;
+        mso-hide: all;
+        font-size: 1px;
+        line-height: 1px;
+        color: #f6f6f6;
+      "
+    >
+      A new order ({{order_number}}) has been placed on {{site_name}}.
+    </div>
+    <!-- END: Preheader -->
+
+    <table
+      role="presentation"
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      width="100%"
+      style="background-color: #f6f6f6"
+    >
+      <tr>
+        <td align="center" style="padding: 24px 12px">
+          <!-- Container -->
+          <table
+            role="presentation"
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="600"
+            style="
+              max-width: 600px;
+              width: 100%;
+              background-color: #ffffff;
+              border-radius: 8px;
+            "
+          >
+            <!-- START: Header -->
+            <tr>
+              <td
+                align="center"
+                style="background-color: #d51d28; padding: 20px 24px"
+              >
+                <img
+                  src="{{logo_url}}"
+                  width="140"
+                  height="40"
+                  alt="{{site_name}} logo"
+                  style="
+                    display: block;
+                    width: 140px;
+                    height: 40px;
+                    object-fit: contain;
+                  "
+                />
+              </td>
+            </tr>
+            <!-- END: Header -->
+
+            <!-- START: Hero -->
+            <tr>
+              <td
+                align="left"
+                style="
+                  padding: 28px 28px 12px 28px;
+                  font-family: Arial, Helvetica, sans-serif;
+                "
+              >
+                <h1
+                  style="
+                    margin: 0;
+                    font-size: 22px;
+                    line-height: 1.3;
+                    color: #1c2a48;
+                  "
+                >
+                  New Order Received – {{order_number}}
+                </h1>
+              </td>
+            </tr>
+            <!-- END: Hero -->
+
+            <!-- START: Content -->
+            <tr>
+              <td
+                align="left"
+                style="
+                  padding: 0 28px 8px 28px;
+                  font-family: Arial, Helvetica, sans-serif;
+                  font-size: 15px;
+                  line-height: 1.6;
+                  color: #444444;
+                "
+              >
+                <p style="margin: 0 0 12px 0">
+                  A customer has just placed a new order on <strong>{{site_name}}</strong>.
+                </p>
+
+                <p style="margin: 0 0 12px 0">
+                  <strong>Order Number:</strong>
+                  <span style="color: #0077b6">{{order_number}}</span>
+                </p>
+
+                 <p style="margin: 0 0 12px 0">
+                  <strong>Order Platform:</strong>
+                  <span style="color: #000000; font-weight: bold;">{{order_platform}}</span>
+                </p>
+
+                <p style="margin: 0 0 12px 0"><strong>Customer Details:</strong></p>
+                <p style="margin: 0 0 4px 0"><strong>Name:</strong> {{customer_name}}</p>
+                <p style="margin: 0 0 4px 0"><strong>Email:</strong> {{customer_email}}</p>
+                <p style="margin: 0 0 12px 0"><strong>Phone:</strong> {{customer_phone}}</p>
+                <p style="margin: 0 0 12px 0"><strong>Service Type:</strong> {{delivery_type}}</p>
+                <p style="margin: 0 0 12px 0"><strong>Delivery Address:</strong> {{delivery_address}}</p>
+                <p style="margin: 0 0 12px 0"><strong>Delivery Area:</strong> {{delivery_area}}</p>
+                <p style="margin: 0 0 12px 0"><strong>Delivery Fee:</strong>  ₦ {{delivery_fee}}</p>
+                <p style="margin: 0 0 12px 0"><strong>Delivery Instructions:</strong> {{delivery_instructions}}</p>
+
+                <p style="margin: 0 0 12px 0">
+                  <strong>Total Amount:</strong>
+                  ₦ {{total_amount}}
+                </p>
+
+                <p style="margin: 0 0 12px 0">
+                  <strong>Order Details:</strong>
+                </p>
+
+                <div
+                  style="
+                    background: #fafafa;
+                    border: 1px solid #eaeaea;
+                    padding: 12px;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    color: #555;
+                  "
+                >
+                  {{order_details}}
+                </div>
+              </td>
+            </tr>
+            <!-- END: Content -->
+
+            <!-- START: Footer -->
+            <tr>
+              <td
+                align="center"
+                style="
+                  background-color: #f6f6f6;
+                  padding: 20px 16px;
+                  font-family: Arial, Helvetica, sans-serif;
+                  font-size: 12px;
+                  line-height: 1.6;
+                  color: #777777;
+                  border-top: 1px solid #ececec;
+                "
+              >
+                <p style="margin: 0 0 8px 0">
+                  &copy; {{year}} {{site_name}}. All rights reserved.
+                </p>
+                <p style="margin: 0 0 8px 0">{{company_address}}</p>
+                <p style="margin: 0">
+                  Support Email: {{support_email}}
+                </p>
+              </td>
+            </tr>
+            <!-- END: Footer -->
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

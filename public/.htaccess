@@ -1,0 +1,27 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# Serve JS, CSS, images, fonts with correct MIME types
+AddType application/javascript .js
+AddType text/css .css
+AddType image/png .png
+AddType image/jpeg .jpg .jpeg
+AddType image/gif .gif
+AddType image/svg+xml .svg
+AddType font/woff .woff
+AddType font/woff2 .woff2
+AddType application/font-woff .woff
+AddType application/vnd.ms-fontobject .eot
+AddType font/ttf .ttf
+AddType font/otf .otf
+
+# Redirect all requests to index.php except existing files or folders
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# Optional: exclude certain extensions explicitly to be safe
+RewriteCond %{REQUEST_URI} !\.(?:js|css|png|jpg|jpeg|gif|svg|woff2?|ttf|eot)$ [NC]
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# Optional: Force HTTPS
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

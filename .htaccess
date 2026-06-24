@@ -1,0 +1,17 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# Set default index file
+DirectoryIndex index.php index.html
+
+# Disable directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "^\.env$">
+    Require all denied
+</FilesMatch>
+
+# Redirect all requests to public folder unless already in it
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]

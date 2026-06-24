@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Car Verification Code</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      font-family: Arial, Helvetica, sans-serif;
+    "
+  >
+    <table
+      role="presentation"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      width="100%"
+    >
+      <tr>
+        <td align="center" style="padding: 30px 15px">
+          <!-- Outer container -->
+          <table
+            role="presentation"
+            cellpadding="0"
+            cellspacing="0"
+            width="600"
+            style="
+              max-width: 600px;
+              background-color: #ffffff;
+              border-radius: 10px;
+              overflow: hidden;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            "
+          >
+            <!-- Header -->
+            <tr>
+              <td
+                align="center"
+                style="background-color: #1c2a48; padding: 20px"
+              >
+                <img
+                  src="{{logo_url}}"
+                  alt="{{platform_name}} Logo"
+                  width="180"
+                  style="display: block"
+                />
+              </td>
+            </tr>
+
+            <!-- Body -->
+            <tr>
+              <td
+                style="
+                  padding: 30px;
+                  color: #333333;
+                  font-size: 16px;
+                  line-height: 1.6;
+                "
+              >
+                <p style="margin: 0 0 15px">
+                  Hello <strong>{{user_name}}</strong>,
+                </p>
+
+                <p style="margin: 0 0 15px">
+                  Your car verification request has been received. Use the
+                  verification code below to access detailed information about
+                  the vehicle.
+                </p>
+
+                <!-- Verification Code -->
+                <p
+                  style="
+                    background-color: #fac800;
+                    color: #1c2a48;
+                    font-weight: bold;
+                    font-size: 20px;
+                    text-align: center;
+                    padding: 12px;
+                    border-radius: 6px;
+                    margin: 25px 0;
+                  "
+                >
+                  {{verification_code}}
+                </p>
+
+                <p style="margin: 0 0 15px">
+                  <strong>Steps to view the car information:</strong>
+                </p>
+                <ol style="margin: 0 0 25px; padding-left: 20px">
+                  <li>
+                    Click the button below or visit the verification page.
+                  </li>
+                  <li>
+                    Enter the code <strong>{{verification_code}}</strong>.
+                  </li>
+                  <li>Click on <em>Verify</em> to see the full car report.</li>
+                </ol>
+
+                <!-- Verify Button -->
+                <table
+                  role="presentation"
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  align="center"
+                  style="margin: 20px auto"
+                >
+                  <tr>
+                    <td bgcolor="#fac800" style="border-radius: 5px">
+                      <a
+                        href="{{verification_link}}"
+                        target="_blank"
+                        style="
+                          display: inline-block;
+                          padding: 14px 28px;
+                          font-size: 16px;
+                          font-weight: bold;
+                          color: #1c2a48;
+                          text-decoration: none;
+                          border-radius: 5px;
+                        "
+                      >
+                        Verify Vehicle
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="margin: 20px 0 10px">
+                  Or copy and paste this link into your browser:
+                </p>
+                <p
+                  style="
+                    word-break: break-all;
+                    color: #3eb489;
+                    font-size: 14px;
+                    margin: 0 0 20px;
+                  "
+                >
+                  <a
+                    href="{{verification_link}}"
+                    target="_blank"
+                    style="color: #3eb489; text-decoration: none"
+                    >{{verification_link}}</a
+                  >
+                </p>
+
+                <p style="margin: 0">
+                  If you have any questions, feel free to
+                  <a
+                    href="{{support_url}}"
+                    style="color: #2196f3; text-decoration: none"
+                    >contact our support team</a
+                  >.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td
+                align="center"
+                style="
+                  background-color: #f9f9f9;
+                  padding: 20px;
+                  font-size: 13px;
+                  color: #777777;
+                "
+              >
+                <p style="margin: 0">
+                  &copy; {{current_year}} {{platform_name}}. All rights
+                  reserved.
+                </p>
+              </td>
+            </tr>
+          </table>
+          <!-- End container -->
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
