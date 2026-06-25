@@ -93,7 +93,6 @@
   --pad: 18px;
   --shadow: 0 8px 32px rgba(11, 110, 79, 0.08);
   --btn-focus-outline: 0 0 0 3px rgba(59, 130, 246, 0.5);
-  --shadow: 0 4px 24px rgba(112,21,0,0.10);
   --shadow-lg: 0 12px 48px rgba(112,21,0,0.16);
   --shadow-md:0 6px 28px rgba(112,21,0,0.13);
   --btn-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -749,4 +748,131 @@ input[type=reset] {
   margin-top: var(--space-1);
   font-size: var(--font-size-xs);
   color: var(--neutral-400);
+}
+
+.app-layout {
+  width: 100%;
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--gray-100);
+}
+
+.nav-primary {
+  background-color: var(--primary);
+  color: var(--text-light);
+}
+.nav-primary .navbar-brand {
+  color: var(--text-light);
+  font-weight: bold;
+}
+.nav-primary .nav-link.active {
+  border: 2px dashed #fff;
+  color: var(--text-light);
+  font-weight: bold;
+}
+.nav-primary .nav-link.active:hover {
+  border-color: var(--accent);
+}
+.nav-primary .nav-link {
+  color: var(--text-light);
+}
+.nav-primary .d-flex {
+  display: flex;
+  align-items: center;
+}
+.nav-primary .form-control {
+  background-color: #fff;
+  color: black;
+}
+
+.hero-carousel .carousel-item {
+  position: relative;
+  width: 100%;
+}
+
+.hero-carousel .carousel-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5); /* adjust darkness here */
+  z-index: 1;
+}
+
+.hero-carousel,
+.hero-carousel .carousel,
+.hero-carousel .carousel-inner,
+.hero-carousel .carousel-item {
+  height: 70vh;
+}
+
+.hero-carousel .carousel img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.float_div {
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+}
+
+.float_div .content {
+  padding: 50px;
+}
+
+.float_div .content h1 {
+  font-size: 4rem;
+  color: var(--text-light);
+  font-weight: 700;
+}
+
+.float_div .content p {
+  font-size: 1rem;
+  color: var(--text-light);
+}
+
+.float_div .content button {
+  padding: 15px 20px;
+  background-color: var(--primary);
+  color: var(--text-light);
+  border: none;
+  border-radius: 30px;
+}
+
+.auth-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5); /* adjust darkness here */
+  z-index: 1;
+}
+
+.auth-container {
+  width: 100%;
+  height: calc(100vh - 57px);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--gray-300);
+  background-image: url("https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=872&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.auth-form-card {
+  width: 400px;
+  min-height: 400px;
+  position: relative;
+  padding: 30px;
+  box-shadow: var(--shadow-md);
+  background-color: var(--gray-100);
+  z-index: 2;
+}
+
+.auth-form-card button {
+  width: 100%;
 }/*# sourceMappingURL=main.css.map */

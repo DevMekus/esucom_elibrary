@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg nav-primary">
+  <div class="container">
     <a class="navbar-brand" href="#">ESUCOM LIBRARY</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -30,7 +30,7 @@
       <form class="d-flex align-center" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
         <button class="btn btn-sm btn-secondary me-2" type="submit">Search</button>
-        <button href="#" class="btn btn-sm btn-primary">Login</button>
+        <a  href="auth/login" class="btn btn-sm btn-primary">Login</a>
       </form>
      
     </div>

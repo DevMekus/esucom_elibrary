@@ -1,0 +1,98 @@
+.app-layout{
+    width: 100%;
+    position: relative;
+    min-height: 100vh;
+    background-color: var(--gray-100);
+}
+
+.nav-primary {
+    background-color: var(--primary);
+    color: var(--text-light);
+
+    .navbar-brand{
+        color: var(--text-light);
+        font-weight: bold;
+    }
+
+    .nav-link.active{
+        border: 2px dashed #fff;
+        color: var(--text-light);
+        font-weight: bold;
+
+        &:hover{
+            border-color: var(--accent);
+        }
+    }
+
+    .nav-link{
+        color: var(--text-light);
+    }
+
+    .d-flex{
+        display: flex;
+        align-items: center;
+    }
+
+    .form-control {
+        background-color: #fff;
+        color: black;
+    }
+}
+
+.hero-carousel .carousel-item {
+    position: relative;
+    width: 100%;
+}
+
+.hero-carousel .carousel-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5); /* adjust darkness here */
+    z-index: 1;
+}
+
+
+.hero-carousel,
+.hero-carousel .carousel,
+.hero-carousel .carousel-inner,
+.hero-carousel .carousel-item {
+    height: 70vh;
+}
+
+.hero-carousel .carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   
+}
+
+.float_div {
+    position: absolute;
+    z-index: 2;
+    width: 100%;  
+    
+}
+
+.float_div .content{
+    padding: 50px;
+}
+
+.float_div .content h1{
+    font-size: 4rem;
+    color: var(--text-light);
+    font-weight: 700;
+}
+
+.float_div .content p{
+    font-size: 1rem;
+    color: var(--text-light);
+}
+
+.float_div .content button{
+    padding: 15px 20px;
+    background-color: var(--primary);
+    color: var(--text-light);
+    border: none;
+    border-radius:  30px;
+
+}

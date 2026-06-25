@@ -1,0 +1,38 @@
+
+.auth-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5); /* adjust darkness here */
+    z-index: 1;
+}
+
+.auth-container{
+    width: 100%;
+    height: calc(100vh - 57px);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--gray-300);
+    background-image: url('https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=872&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    
+}
+
+.auth-form-card{
+    width: 400px;
+    min-height: 400px;
+    position: relative;
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+    background-color: var(--gray-100);
+    z-index: 2;
+}
+
+
+.auth-form-card button{
+    width: 100%;
+}
