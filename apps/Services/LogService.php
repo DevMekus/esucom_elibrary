@@ -1,5 +1,7 @@
 <?php
 namespace App\Services;
+
+use App\Exceptions\ValidationFailedException;
 use App\Repositories\LoggingRepository;
 use App\Utils\Utility;
 use PDO;
@@ -32,30 +34,26 @@ class LogService {
 
     public  function create(array $data){        
 
-        if (!$data['type']){
-           throw new \InvalidArgumentException("Specify logging type");
+        if (!isset($data['type'], $data['title'])){
+           throw new ValidationFailedException("Log type and title required");
         }
 
-        if (!$data['title']){
-           throw new \InvalidArgumentException("Specify logging title");
-        }
-
-        $log = [
-            'branch_id' => $data['branch_id'] ?? null,
-            'type' => $data['type'],
-            'title' => $data['title'],
-            'status' => $data['status'] ?? 'success',
-            'userid' => $data['userid'] ?? null,
-            'ip' => Utility::getUserIP(),
-            'device' => Utility::getUserDevice(),
-        ];
-
-        return $this->repo->create($log);
+        return $this->repo->create(
+            [
+                'branch_id' => $data['branch_id'] ?? null,
+                'type' => $data['type'],
+                'title' => $data['title'],
+                'status' => $data['status'] ?? 'success',
+                'userid' => $data['userid'] ?? null,
+                'ip' => Utility::getUserIP(),
+                'device' => Utility::getUserDevice(),
+            ]
+        );
     }
 
     public function delete(string $id){
         if (!$id){
-           throw new \InvalidArgumentException("Log Id required");
+           throw new ValidationFailedException("Log Id required");
         }       
 
         return $this->repo->delete($id);       

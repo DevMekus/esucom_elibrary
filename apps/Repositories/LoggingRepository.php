@@ -13,7 +13,7 @@ class LoggingRepository{
     public function __construct(PDO $db)
     {
         $this->dbConnection = $db;
-        $this->logTable = Utility::$loginactivity;
+        $this->logTable = Utility::$logs;
     }
 
     

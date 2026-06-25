@@ -70,7 +70,7 @@ class EbookService{
 
     public function update(string $id, array $data){
         if (!isset($id)){
-            throw new ValidationFailedException('Database Id required');
+            throw new ValidationFailedException('Ebook Id required');
         }
         $getCursor = $this->paginateOrders(null, 'next', ['id' => (int)$id]);
          
@@ -78,9 +78,9 @@ class EbookService{
             throw new ResourceNotFoundException("ebook information failed to fetch");
         }
 
-        $database = $getCursor['data'][0];
+        $ebook = $getCursor['data'][0];
 
-        return $this->repo->update($database , $data);
+        return $this->repo->update($ebook , $data);
     }
 
     public function delete(string $id){

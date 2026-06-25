@@ -19,6 +19,7 @@ class Utility
     public static $notifications_tbl = 'notifications';
     public static $departments_tbl = 'departments';
     public static $category_tbl = 'category';
+    public static $logs = '';
 
     public static $recordLimit = 10;
 

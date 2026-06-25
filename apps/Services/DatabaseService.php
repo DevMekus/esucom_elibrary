@@ -54,11 +54,11 @@ class DatabaseService{
         ]);
     }
 
-    public function update(string $id, array $data){
+    public function update(int $id, array $data){
         if (!isset($id)){
             throw new ValidationFailedException('Database Id required');
         }
-        $getCursor = $this->paginateOrders(null, 'next', ['id' => (int)$id]);
+        $getCursor = $this->paginateOrders(null, 'next', ['id' => $id]);
          
         if(!$getCursor || count($getCursor['data']) == 0){
             throw new ResourceNotFoundException("Database information failed to fetch");
@@ -69,7 +69,7 @@ class DatabaseService{
         return $this->repo->update($database , $data);
     }
 
-    public function delete(string $id){
+    public function delete(int $id){
         if (!isset($id)){
             throw new ValidationFailedException('Database Id required');
         }

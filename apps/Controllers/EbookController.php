@@ -13,4 +13,46 @@ class EbookController{
         $this->service =  new EbookService();
     }
 
+    public function index(){
+        $cursor = isset($_GET['cursor']) ? (int) $_GET['cursor'] : null;
+        $direction = $_GET['direction'] ?? 'next';
+
+        $filters = [
+            'search' => $_GET['search'] ?? null,          
+            'id' => $_GET['id'] ?? null,          
+        ];
+
+        //validate this array
+        $result = $this->service->paginateOrders($cursor, $direction, $filters);
+        Response::success($result, "Ebook information");
+    }
+
+    public function store(){
+        $required = ['title', 'author', 'subject_id'];
+        
+        $data = RequestValidator::validate($required, $_POST);
+        $data = RequestValidator::sanitize($data);        
+
+        $created = $this->service->create($data);
+
+        Response::success($created, "Ebook saved");
+    }
+
+    public function update(string $id){
+        $id = RequestValidator::parseId($id);
+
+        $required = ['title', 'author', 'subject_id'];
+        
+        $data = RequestValidator::validate($required, $_POST);
+        $data = RequestValidator::sanitize($data);         
+        $update = $this->service->update((int)$id, $data);
+        Response::success($update, "Ebook updated");
+    }
+
+    public function destroy(string $id){
+        $id = RequestValidator::parseId($id);
+        $delete = $this->service->delete((int)$id);       
+        Response::success($delete, "Ebook deleted");
+    }
+
 }

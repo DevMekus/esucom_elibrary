@@ -68,7 +68,7 @@ class EbookRepository{
         ];
     }
 
-     private function getDataByIds(array $dataIds): array {
+    private function getDataByIds(array $dataIds): array {
 
         $placeholders = implode(',', array_fill(0, count($dataIds), '?'));
 
