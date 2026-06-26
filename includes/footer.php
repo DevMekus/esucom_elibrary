@@ -43,7 +43,8 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- html2pdf.js CDN -->
 
-  <!-- Modal -->
+ 
+    <script type="module" src="<?php echo BASE_URL; ?>assets/js/app.js"></script>
 
   <script>
       AOS.init({

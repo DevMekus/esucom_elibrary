@@ -39,7 +39,7 @@ export async function ApiClient(url, data = {}, method = "GET") {
     }
 
     // Perform fetch request
-    const response = await fetch(url, options);
+    const response = await fetch(`${CONFIG.API}/${url}`, options);
 
     if (!response.ok) {
       let errorMessage = response.statusText;

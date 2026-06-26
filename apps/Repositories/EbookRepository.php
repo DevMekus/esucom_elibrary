@@ -15,17 +15,16 @@ class EbookRepository{
     }
 
     private function buildFilters(array $filters){
-        $conditions = ["o.deleted_at IS NULL"];
+        $conditions = [];
         $params = [];       
 
         if (!empty($filters['search'])){
-            $conditions[] = "o.customer_name LIKE :search";
+            $conditions[] = "e.title LIKE :search OR e.author";
             $params[':search'] = '%' . $filters['search'] . '%';
-
         }
 
         if (!empty($filters['id'])){
-            $conditions[] = "o.id = :id";
+            $conditions[] = "e.category_id = :id";
             $params[':id'] = $filters['id'];
         }
 
@@ -47,8 +46,8 @@ class EbookRepository{
         $filterData = $this->buildFilters($filters);
 
         $result = $paginator->paginate([
-            'table' => $this->table . ' o',
-            'column' => 'o.id',
+            'table' => $this->table . ' e',
+            'column' => 'e.id',
             'cursor' => $cursor,
             'direction' =>  $direction,
             'filters' => $filterData['sql'],
@@ -73,7 +72,15 @@ class EbookRepository{
         $placeholders = implode(',', array_fill(0, count($dataIds), '?'));
 
         $query = "
+            SELECT e.*,
+            c.category
+
+            FROM {$this->table} AS e
+            LEFT JOIN category AS c ON c.id = e.category_id
             
+            WHERE e.id  IN ($placeholders)
+            ORDER BY e.title ASC
+                
         ";
 
         $stmt = $this->connection->prepare($query);
@@ -98,7 +105,8 @@ class EbookRepository{
                     'title' => $row['title'],
                     'author' => $row['author'],
                     'url' => $row['access_url'],
-                    'subject_id' => $row['subject_id'],
+                    'category' => $row['category'],
+                    'category_id' => $row['category_id'],
                     'updated_at' => $row['updated_at'],
                 ];
             }            

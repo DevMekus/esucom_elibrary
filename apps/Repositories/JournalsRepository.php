@@ -15,17 +15,17 @@ class JournalsRepository{
     }
 
     private function buildFilters(array $filters){
-        $conditions = ["o.deleted_at IS NULL"];
+        $conditions = [];
         $params = [];       
 
         if (!empty($filters['search'])){
-            $conditions[] = "o.customer_name LIKE :search";
+            $conditions[] = "j.title LIKE :search";
             $params[':search'] = '%' . $filters['search'] . '%';
 
         }
 
         if (!empty($filters['id'])){
-            $conditions[] = "o.id = :id";
+            $conditions[] = "j.department_id = :id";
             $params[':id'] = $filters['id'];
         }
 
@@ -47,8 +47,8 @@ class JournalsRepository{
         $filterData = $this->buildFilters($filters);
 
         $result = $paginator->paginate([
-            'table' => $this->table . ' o',
-            'column' => 'o.id',
+            'table' => $this->table . ' j',
+            'column' => 'j.id',
             'cursor' => $cursor,
             'direction' =>  $direction,
             'filters' => $filterData['sql'],
@@ -73,7 +73,13 @@ class JournalsRepository{
         $placeholders = implode(',', array_fill(0, count($dataIds), '?'));
 
         $query = "
+            SELECT j.*,
+                d.department_name
+            FROM {$this->table} AS j
+            LEFT JOIN departments AS d ON d.id = j.department_id
             
+            WHERE j.id  IN ($placeholders)
+            ORDER BY j.title ASC
         ";
 
         $stmt = $this->connection->prepare($query);
@@ -93,10 +99,9 @@ class JournalsRepository{
             if (!isset($output[$Id])) {
                 $output[$Id] = [
                     'id' => $Id,
-                    'journal_id' => $row['journal_id'],
-                    'department_id' => $row['department_id'],
                     'url' => $row['access_url'],
                     'title' => $row['title'],
+                    'department_id' => $row['department_id'],
                     'department_name' => $row['department_name'],
                     'updated_at' => $row['updated_at'],
                 ];

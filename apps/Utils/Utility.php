@@ -8,14 +8,11 @@ class Utility
     public static $API_ROUTE = "/esucomlib/api";
     public static $siteName = '';
 
-    public static $student_tbl = 'students';
-    public static $accounts_tbl = 'accounts';
-    public static $admin_tbl = 'admins';
+    
     public static $research_databases_tbl = 'research_databases';
-    public static $ejournals_tbl = 'ejournal_main';
+    public static $ejournals_tbl = 'ejournal';
     public static $opac_catalog_tbl = 'opac';
-    public static $ebooks_tbl = 'ebooks';
-    public static $subjects_tbl = 'subjects';
+    public static $ebooks_tbl = 'ebooks';    
     public static $notifications_tbl = 'notifications';
     public static $departments_tbl = 'departments';
     public static $category_tbl = 'category';

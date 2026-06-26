@@ -14,10 +14,10 @@ class UserRepository {
     public function __construct(PDO $db)
     {
         $this->dbConnection = $db;
-        $this->accountTbl = Utility::$accounts;
-        $this->userTbl = Utility::$users;
-        $this->rolesTbl = Utility::$roles;
-        $this->sessionTbl =  Utility::$sessions_tbl;
+        $this->accountTbl = '';
+        $this->userTbl = '';
+        $this->rolesTbl = '';
+        $this->sessionTbl =  '';
     }    
 
 
