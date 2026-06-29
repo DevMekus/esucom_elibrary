@@ -39,8 +39,7 @@ class LogService {
         }
 
         return $this->repo->create(
-            [
-                'branch_id' => $data['branch_id'] ?? null,
+            [               
                 'type' => $data['type'],
                 'title' => $data['title'],
                 'status' => $data['status'] ?? 'success',

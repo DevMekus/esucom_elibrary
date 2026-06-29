@@ -11,7 +11,7 @@ class AdminOnlyMiddleware
     {
         $userData = AuthMiddleware::verifyToken();
 
-        if (!isset($userData['role']) || $userData['role'] !== 'admin') {
+        if (!isset($userData['role']) || $userData['role'] !== 'super_admin') {
             Response::error(403, 'Access denied');
         }
 

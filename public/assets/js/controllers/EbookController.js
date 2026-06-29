@@ -12,6 +12,7 @@ export default class EbookController {
         this.btnPrev = document.getElementById('prevBtn');
         this.initializeData()
         this.buttonEvents()
+        this.previewFile();
     }
 
     static async initializeData(){
@@ -60,6 +61,84 @@ export default class EbookController {
 
         container.innerHTML = books
         this.updateButtons()
+        this.editModal()       
+    }
+
+    static editModal(){
+        document.querySelectorAll('.action-btn')?.forEach(btn => {
+           btn.addEventListener('click', async() => {
+                const action = btn.dataset.action
+                const id = btn.dataset.id
+
+      
+
+                const filtered = EbookService.ebooks.find(book => book.id == id)
+
+                if (action == 'edit'){
+                    const title = document.getElementById('title')
+                    const author = document.getElementById('author')
+                    const category_id = document.getElementById('ebookCat_id')
+                    const url = document.getElementById('url')
+                    const filePreview = document.getElementById('filePreview')
+                    const ebookModal = document.querySelector('.ebookModal')
+
+                    /**add values  */
+                    title.value = filtered.title;
+                    author.value = filtered.author;
+                    category_id.value = filtered.category_id;
+                    url.value = filtered.url;
+                    filePreview.innerHTML = filtered.url;
+                    ebookModal.id = 'editModal';
+                    
+                    $("#ebookModal").modal("show")
+
+                    ebookModal.addEventListener('submit', async(e) => {
+                        e.preventDefault();
+
+                        const data = new FormData(e.target);
+            
+                        const result = await Utility.confirm("Update eBook?")
+                        
+                        if (!result.isConfirmed){
+                            Utility.toast("Action cancelled");
+                            return;
+                        }
+                    
+                        const isUpdated = await ApiClient(`update/ebook/${id}`, data, "POST")
+
+                        console.log(isUpdated)
+
+                        if (!isUpdated.success){
+                            Utility.toast('Creation failed. An error occurred')
+                            return
+                        }
+
+                      
+                        
+                        Utility.reloadPage() 
+                    })
+                }
+                if (action == 'delete'){
+                    const result = await Utility.confirm("Delete eBook?")
+                        
+                    if (!result.isConfirmed){
+                        Utility.toast("Action cancelled");
+                        return;
+                    }
+                    
+                    const isDeleted = await ApiClient(`ebook/${id}`, {}, "DELETE")
+
+                    if (!isDeleted.success){
+                        Utility.toast('Delete failed. An error occurred')
+                        return
+                    }
+
+                    Utility.toast('Ebook Deleted','success');
+                    
+                    Utility.reloadPage() 
+                }
+           })
+        })
     }
 
     static updateButtons(){
@@ -123,10 +202,10 @@ export default class EbookController {
                 Utility.toast("Action cancelled");
                 return;
             }
+           
+            const isCreated = await ApiClient('ebook', data, "POST")
 
-            const isCreated = await EbookService.postNewEbook(data)
-
-            if (!isCreated){
+            if (!isCreated.success){
                 Utility.toast('Creation failed. An error occurred')
                 return
             }
@@ -134,7 +213,40 @@ export default class EbookController {
             Utility.reloadPage() 
         })
 
+        
+
+        
+
        
 
+    }
+
+    static previewFile() {
+        const fileInput = document.getElementById("fileInput");
+        const preview = document.getElementById("filePreview");
+        fileInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file) return;
+            const fileType = file.type;
+            const fileName = file.name;
+            preview.innerHTML = "";
+            if (fileType === "application/pdf") {
+                const iframe = document.createElement("iframe");
+                iframe.src = URL.createObjectURL(file);
+                iframe.width = "100%";
+                iframe.height = "400px";
+                preview.appendChild(iframe);
+            } else if (
+                fileType === "application/msword" ||
+                fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ) {
+                const info = document.createElement("p");
+                info.textContent = `Selected Word document: ${fileName}`;
+                preview.appendChild(info);
+            } else {
+                preview.innerHTML = '<p style="color:red;">Unsupported file type</p>';
+                fileInput.value = "";
+            }
+        });
     }
 }

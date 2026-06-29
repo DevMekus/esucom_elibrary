@@ -1,46 +1,42 @@
 <?php
-require_once ROOT_PATH . '/includes/appHeader.php';
 require_once ROOT_PATH . '/includes/header.php';
+require_once ROOT_PATH . '/includes/appHeader.php';
 include "navbar.php";
+
 ?>
-<body class="app-layout" data-page='ebook' data-permission='<?= $user['role']; ?>'>
+<body data-page='ebook' data-permission='<?= $user['role']; ?>'>  
     <div 
     id="categories" 
+    class="mt-4"
     data-branches='<?= htmlspecialchars(json_encode($categories), ENT_QUOTES, 'UTF-8'); ?>'>
     </div>
-    <section class="container mt-4">
+    <section class="container">
         <div class="page-title">
             <h3>📚 eBooks Library</h3>
             <p>Browse and download from 37+ academic eBooks</p>
         </div>
-       <div class="filter-group bg-light p-3 w-100 d-flex gap-2 r mb-3">
-            <div class="input-group w-25">
-                <span class="input-group-text" id="basic-addon1">🔍</span>
-                <input type="text" id="searchInput" class="form-control" placeholder="Search ebooks" aria-label="Username" aria-describedby="basic-addon1">
-            </div>
-            <select class="form-select w-25" id="category_id">
+        <div class="filter-group">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search ebooks" aria-label="Username" aria-describedby="basic-addon1">
+            <select class="form-select" id="category_id">
                 <option value="null" >All Categories</option>
                 <?php foreach($categories as $category):  ?>
                 <option value="<?= strtolower($category['id']) ?>"><?= strtoupper($category['category']) ?></option>
-                <?php endforeach; ?>
-               
+                <?php endforeach; ?>               
             </select>
-            <button class="btn btn-sm btn-primary" id="searchBtn">🔍 Search</button> | 
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button class="btn btn-sm btn-primary" id="searchBtn">🔍 Search</button>  
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ebookModal">
             Add eBook
             </button>
         </div>
-        <section class="row" id="card_row"> 
-        </section>
+        <div class="row" id="card_row"> 
+        </div>
         <section class="w-100 d-flex gap-3 justify-content-center mt-4" id="pagination">
             <button class="page-link btn btn-sm" id="prevBtn">Previous</button>
             <button class="page-link btn btn-sm" id="nextBtn">Next</button>
         </section>
-    </section>
- <?php require "footer.php" ?>
-<?php require_once ROOT_PATH . '/includes/footer.php'; ?>
+     </section>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal fade" id="ebookModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -56,15 +52,17 @@ include "navbar.php";
                 <div class="mb-3">
                     <label for="author" class="form-label">Ebook Author(s) *</label>
                     <input type="text" class="form-control" name="author" id="author" placeholder="Eg: Prof. Ekwochi Uchenna">
+                   
                 </div>
                 <div class="mb-3">
                     <label for="author" class="form-label">Category *</label>                
-                    <select class="form-select" aria-label="Default select example" name="category_id">              
+                    <select class="form-select" aria-label="Default select example" name="category_id" id="ebookCat_id">              
                         <?php foreach($categories as $category):  ?>
                             <option value="<?= strtolower($category['id']) ?>"><?= strtoupper($category['category']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
+                <input type="hidden" class="form-control" name="url" id="url">
                 <div class="mb-3">
                     <label for="author" class="form-label">Upload Ebook File *</label>
                     <input 
@@ -86,5 +84,8 @@ include "navbar.php";
     </div>
   </div>
 </div>
+
+<?php require "footer.php" ?>
+<?php require_once ROOT_PATH . '/includes/footer.php'; ?>
 </body>
 </html>

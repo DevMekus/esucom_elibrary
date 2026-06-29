@@ -21,8 +21,7 @@ class UserController {
         $filters = [
             'search' => $_GET['search'] ?? null,          
             'id' => $_GET['id'] ?? null,
-            'userid' => $_GET['userid'] ?? null,
-            'branch_id' => $_GET['branch_id'] ?? null,          
+            'userid' => $_GET['userid'] ?? null,               
             'email' => $_GET['email'] ?? null,          
         ];
 
@@ -43,7 +42,10 @@ class UserController {
    
 
     public function store(){
-        $data = RequestValidator::validate([], $_POST);
+        $data = RequestValidator::validate([           
+            'email_address' => 'required|min:1',                
+        ]);
+        // $data = RequestValidator::validate([], $_POST);
         $data = RequestValidator::sanitize($data);             
 
         $created = $this->service->create($data);
@@ -105,16 +107,7 @@ class UserController {
         Response::success($delete, "User deleted");
     }    
 
-    public function analytics(){
-        
-        $filters = [
-            'branch_id' => $_GET['branch_id'] ?? null
-        ];
-        
-        $analytic = $this->service->userAnalytics($filters);
-        Response::success($analytic, "User analytics");
-    }
-
+   
     public function guestMessaging()
     {
         $data = RequestValidator::validate([
@@ -128,14 +121,5 @@ class UserController {
         Response::success([], "Message Sent");                
     }
 
-    public function migrationController(){
-        try {
-            $migrated = $this->service->accountMigration();
-           
-            // echo count($migrated);exit;
-            Response::success($migrated, "Migration complete");
-        } catch (\Throwable $th) {
-            Response::error(500, "Migration failed: ". $th->getMessage());
-        }
-    }
+    
 }

@@ -76,7 +76,13 @@ class AuthService {
 
         } catch (\Throwable $e) {
             $this->db->rollBack();
-            throw new \RuntimeException("Service error while login user", 0, $e);
+           $originalMessage = $e->getMessage();
+                
+                throw new \RuntimeException(
+                "Service error while logging in: " . $originalMessage,
+                0,
+                $e
+            );
         }
        
     }

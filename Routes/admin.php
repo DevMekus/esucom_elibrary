@@ -10,10 +10,9 @@ $user = new UserController();
 $ebook = new EbookController();
 
 
-Router::group('v1', function () use ($ebook) {
+Router::group('v1/admin', function () use ($ebook) {
     
-#Ebook Routes
-    Router::add('GET', '/ebook', [$ebook, 'store']); 
+    
    
 
 }, [AdminOnlyMiddleware::class]);

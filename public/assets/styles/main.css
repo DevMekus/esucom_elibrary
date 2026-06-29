@@ -776,19 +776,67 @@ input[type=reset] {
 
 .filter-group {
   display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 10px;
+  width: 100%;
+  position: relative;
+  padding: 15px;
+  background-color: var(--gray-100);
+  border-radius: 10px;
 }
-.filter-group input, .filter-group select {
-  width: 200px;
-  height: 45px;
+.filter-group:hover {
+  box-shadow: var(--shadow);
+}
+
+.filter-group input,
+.filter-group select {
+  max-width: 200px;
+  height: 40px;
   border: 1px solid var(--primary);
   outline: none;
 }
+
 .filter-group button {
-  height: 45px;
-  border-radius: 0px;
+  height: 40px;
+  border-radius: 10px;
 }
 
+.row {
+  margin-top: 20px;
+}
+
+.col-sm-3,
+.col-sm-4 .col-sm-6 {
+  margin-bottom: 20px;
+}
+
+.cards-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 2px;
+  gap: 2px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .filter-group input,
+  .filter-group select,
+  .filter-group button {
+    max-width: 100%;
+    width: 100%;
+  }
+  .hideonMobile {
+    display: none;
+  }
+}
 .nav-primary {
   background-color: var(--primary);
   color: var(--text-light);
@@ -815,6 +863,9 @@ input[type=reset] {
 .nav-primary .form-control {
   background-color: #fff;
   color: black;
+}
+.nav-primary .auth-btn {
+  border: 1px solid var(--accent);
 }
 
 .hero-carousel .carousel-item {

@@ -17,6 +17,7 @@ class UserRepository {
         $this->accountTbl = Utility::$accounts_tbl;
         $this->userTbl = Utility::$users_profile;
         $this->roles = Utility::$roles;
+        $this->sessionTbl = Utility::$sessionTbl;
         
     }    
 

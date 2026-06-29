@@ -21,6 +21,7 @@ class Utility
     public static $accounts_tbl = 'accounts_tbl';
     public static $users_profile = 'users_profile';
     public static $roles = 'roles';
+    public static $sessionTbl = 'sessions';
 
     public static $recordLimit = 10;
 

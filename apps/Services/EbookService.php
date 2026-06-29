@@ -58,34 +58,99 @@ class EbookService{
     
     public function create(array $data){    
         $this->validate($data);
+        
         $ebookUrl = $this->handleUpload();
 
         return $this->repo->create([
-            $data['title'],
-            $data['author'], 
-            $ebookUrl,           
-            $data['category_id'],          
+            'title' => $data['title'],
+            'author' => $data['author'], 
+            'access_url' => $ebookUrl,           
+            'category_id' =>  $data['category_id'],          
         ]);
     }
 
-    public function update(string $id, array $data){
+    private function handleUpdateUpload(array $data):string
+    {
+        $url = $data['url'];
+
+       
+        $file = $_FILES['ebook_file'] ?? null;
+
+        $hasFile = $file &&
+            (
+                (is_array($file['name']) && !empty($file['name'][0]) && $file['error'][0] === UPLOAD_ERR_OK) ||
+                (!is_array($file['name']) && !empty($file['name']) && $file['error'] === UPLOAD_ERR_OK)
+            );
+
+        if (
+            $hasFile
+        ) {
+
+            $targetDir = "public/UPLOADS/ebooks/";
+            
+            $fileUrl = Utility::uploadDocuments('ebook_file', $targetDir);
+
+            if (!$fileUrl || !$fileUrl['success']) {
+                throw new ValidationFailedException('file upload failed');
+            }
+
+            $url  = $fileUrl['files'][0];    
+            
+            if (!empty($data['url'])) {                   
+                $filePath = __DIR__ . "/../../public/UPLOADS/ebooks/" . basename($data['url']);
+                if (file_exists($filePath)) unlink($filePath);
+            }
+        } 
+
+        return $url;  
+        
+    }
+
+    public function update(int $id, array $data){
         if (!isset($id)){
             throw new ValidationFailedException('Ebook Id required');
         }
-        $getCursor = $this->paginateOrders(null, 'next', ['id' => (int)$id]);
+
+        $getCursor = $this->paginateOrders(null, 'next', ['rowid' => $id]);
          
         if(!$getCursor || count($getCursor['data']) == 0){
             throw new ResourceNotFoundException("ebook information failed to fetch");
         }
 
-        $ebook = $getCursor['data'][0];
+        $ebook = $getCursor['data'][0]; 
+        
+        $url = $this->handleUpdateUpload($data);
 
-        return $this->repo->update($ebook , $data);
+        $newData = [
+            'id' => $id,
+            'title' => $data['title'] ?? $ebook['title'],
+            'author' => $data['author'] ?? $ebook['author'],
+            'url' => $url,
+            'category' => $data['category'] ?? $ebook['category'],
+            'category_id' => $data['category_id'] ?? $ebook['category_id'],
+            
+        ];
+       
+
+        return $this->repo->update($newData);
     }
 
     public function delete(string $id){
         if (!isset($id)){
             throw new ValidationFailedException('Ebook Id required');
+        }
+
+        $getCursor = $this->paginateOrders(null, 'next', ['rowid' => $id]);
+         
+        if(!$getCursor || count($getCursor['data']) == 0){
+            throw new ResourceNotFoundException("ebook information failed to fetch");
+        }
+
+        $data = $getCursor['data'][0]; 
+
+        if (!empty($data['url'])) {                   
+            $filePath = __DIR__ . "/../../public/UPLOADS/ebooks/" . basename($data['url']);
+            if (file_exists($filePath)) unlink($filePath);
         }
 
         return $this->repo->delete((int)$id);

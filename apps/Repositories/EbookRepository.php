@@ -28,6 +28,11 @@ class EbookRepository{
             $params[':id'] = $filters['id'];
         }
 
+         if (!empty($filters['rowid'])){
+            $conditions[] = "e.id = :id";
+            $params[':id'] = $filters['rowid'];
+        }
+
         
         $sql = '';
 
@@ -122,7 +127,7 @@ class EbookRepository{
                 "INSERT INTO {$this->table} (title, author, access_url, category_id) 
                 VALUES (:title, :author, :access_url, :category_id)"
             );
-            $stmt->bindValue(':title', $ebook['title'], \PDO::PARAM_INT);
+            $stmt->bindValue(':title', $ebook['title'], \PDO::PARAM_STR);
             $stmt->bindValue(':author', $ebook['author'], \PDO::PARAM_STR);
             $stmt->bindValue(':access_url', $ebook['access_url'], \PDO::PARAM_STR);
             $stmt->bindValue(':category_id', $ebook['category_id'], \PDO::PARAM_STR);
@@ -148,7 +153,7 @@ class EbookRepository{
         }
     }
 
-    public function update(array $prev, array $new){
+    public function update(array $new){
         try {
             $query = "UPDATE {$this->table} 
                 SET title = :title, 
@@ -160,11 +165,11 @@ class EbookRepository{
             
             $stmt = $this->connection->prepare($query);
 
-            $stmt->bindValue(':title', $new['title'] ?? $prev['title']);
-            $stmt->bindValue(':author', $new['author'] ?? $prev['author']);
-            $stmt->bindValue(':access_url', $new['access_url'] ?? $prev['access_url']);
-            $stmt->bindValue(':category_id', $new['category_id'] ?? $prev['category_id']);
-            $stmt->bindValue(':id',  $prev['id']);
+            $stmt->bindValue(':title', $new['title']);
+            $stmt->bindValue(':author', $new['author']);
+            $stmt->bindValue(':access_url', $new['url']);
+            $stmt->bindValue(':category_id', $new['category_id']);
+            $stmt->bindValue(':id',  $new['id']);
 
             return $stmt->execute();  
 

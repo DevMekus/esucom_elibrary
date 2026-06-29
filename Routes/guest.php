@@ -6,6 +6,7 @@ use App\Controllers\EbookController;
 use App\Controllers\JournalsController;
 use App\Controllers\OpacController;
 use App\Controllers\SchoolController;
+use App\Controllers\UserController;
 use App\Routes\Router;
 use App\Middleware\GuestOnlyMiddleware;
 
@@ -16,6 +17,7 @@ $ejournal = new JournalsController();
 $database = new DatabasesController();
 $opac = new OpacController();
 $school = new SchoolController();
+$user = new UserController();
 
 
 Router::group('v1', function () use (
@@ -24,7 +26,7 @@ Router::group('v1', function () use (
     $ejournal,
     $database,
     $opac,
-    $school
+    $school,$user
 ) {
 
     #Auth Routes
@@ -47,5 +49,8 @@ Router::group('v1', function () use (
 
     #School Routes
     Router::add('GET', '/school', [$school, 'school']); 
+
+    #User Routes
+    Router::add('POST', '/user/register', [$user, 'store']); 
 
 }, [GuestOnlyMiddleware::class]);

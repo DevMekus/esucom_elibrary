@@ -138,11 +138,10 @@ class LoggingRepository{
     public function create(array $log){
 
         $stmt =  $this->dbConnection->prepare(
-            "INSERT INTO {$this->logTable} (userid, branch_id, log_type, title, status, ip, device) VALUES (:userid, :branch_id, :log_type, :title, :status, :ip, :device)"
+            "INSERT INTO {$this->logTable} (userid, log_type, title, status, ip, device) VALUES (:userid,  :log_type, :title, :status, :ip, :device)"
         );
 
-        $stmt->bindValue(':userid', $log['userid'], \PDO::PARAM_STR);
-        $stmt->bindValue(':branch_id', (int) $log['branch_id'], \PDO::PARAM_STR);
+        $stmt->bindValue(':userid', $log['userid'], \PDO::PARAM_STR);     
         $stmt->bindValue(':log_type', $log['type'], \PDO::PARAM_STR);
         $stmt->bindValue(':title', $log['title'], \PDO::PARAM_STR);
         $stmt->bindValue('status', $log['status'], \PDO::PARAM_STR);

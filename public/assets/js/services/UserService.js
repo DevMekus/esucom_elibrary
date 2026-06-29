@@ -1,9 +1,10 @@
-import Utility from "../core/Utility.js";
-import { ApiClient } from "../core/ApiClient.js";
+import Utility from '../core/Utility.js';
+import { ApiClient } from '../core/ApiClient.js';
 
+export default class UserService {
 
-export default class EbookService {
-    static ebooks = null;
+    static users = [];
+    static analytics = null;
     static loading = false;
     static nextCursor = null;
     static prevCursor = null;
@@ -11,8 +12,10 @@ export default class EbookService {
     static hasNext = false;
     static filters = null
 
-    static async _fetch(direction = 'next', filters = null){
-        
+
+
+    static async _get(direction = 'next', filters = null){
+    
         try {
             if (this.loading) {
                 console.warn('Blocked: already loading');
@@ -22,11 +25,11 @@ export default class EbookService {
 
             if (filters) {
                 this.filters = filters;
-            } 
-
+            }            
+    
             const params = new URLSearchParams()
             
-            params.append('direction', direction)
+            params.append('direction',direction)
                 if (direction === 'next' && this.nextCursor){
                 params.append('cursor', this.nextCursor)           
             }
@@ -34,28 +37,34 @@ export default class EbookService {
             if (direction === 'prev' && this.prevCursor){
                 params.append('cursor', this.prevCursor)           
             }   
-
     
-            const { search, id } = this.filters;
-            if (search !== 'null') params.append('search', search);
-            if (id !== 'null') params.append('id', id);
-           
-
-            const url = `/ebook?${params.toString()}`;
+            const { search, userid } = this.filters;
             
+            if (search !== 'null') params.append('search', search);         
+            if (userid !== 'null') params.append('userid', userid);
+
+            let url = Utility.role == 'admin' ? `admin/users?${params.toString()}` : `users?userid=${userid}`;
+               
             const payload = await ApiClient(url) 
+
+            if (Utility.role == 'admin'){
+                //set the analytics route too: just use the branch Ids
+                // const analytics = `/admin/analytics/users?${params.toString()}`
+                // await UserService._analytics(analytics)  
+            }
             
             if (!payload.data || payload.data.data.length === 0){
-                this.ebooks = []  
-                this.resetCursors();               
+                this.users = []                
                 return;
             }
-
+            //merge the payload with existing. We can call the merge function
             const results = payload.data?.data 
-           
+            
             if (direction === 'next' || direction === 'prev'){               
-                this.ebooks = results;
-            }   
+                this.users = results;
+            } 
+
+            
 
             //update cursor
             this.nextCursor = payload.data.next_cursor;
@@ -70,15 +79,19 @@ export default class EbookService {
         }
     }
 
-    static resetCursors(){
-        this.nextCursor = null;
-        this.prevCursor = null;
-        this.hasNext = false;
-        this.hasPrev = false;
+    static async _analytics(url){
+        try {
+           
+            const payload = await get(url)
+
+            if (payload){
+                this.analytics = payload
+            }
+
+        } catch (error) {
+            console.error('Fetch failed:', error);
+        }
     }
-
-   
-
 
     
 }

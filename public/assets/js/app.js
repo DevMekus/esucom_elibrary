@@ -4,12 +4,14 @@ import EbookController from "./controllers/EbookController.js";
 import JournalController from "./controllers/JournalController.js";
 import DatabaseController from "./controllers/DatabaseController.js";
 import OpacController from "./controllers/OpacController.js";
+import AuthController from './controllers/AuthController.js';
 
 const page = document.body.dataset.page;
 
 document.addEventListener('DOMContentLoaded', () => {
 
     KPIBounceCards()
+    logoutFunction();
  
     switch(page){
       
@@ -24,6 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
         break;
         case 'opac':
             OpacController.init();
+        break;
+        case 'auth':
+            AuthController.init()
         break;
     }
     
@@ -54,4 +59,11 @@ function KPIBounceCards() {
     }
 
     setInterval(bounceCard, 5000);
+}
+
+function logoutFunction() {
+    const logout = document.querySelector(".logout");
+    if (!logout) return;
+
+    AuthController.logout();
 }

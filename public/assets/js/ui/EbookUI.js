@@ -9,30 +9,35 @@ export default class EbookUI{
     eBookCard(book){
 
         const dbPath = book.url;
-        const url = new URL(dbPath);
-        const filename = url.pathname.split("/").pop();
-        const viewerUrl = `${CONFIG.BASE_URL}/public/view-pdf.php?file=${encodeURIComponent(filename)}`;
+        let viewerUrl = ''
+
+        if(dbPath !== '' && dbPath !== null){
+            const url = new URL(dbPath);
+            const filename = url.pathname.split("/").pop();
+            viewerUrl = `${CONFIG.BASE_URL}/public/view-pdf.php?file=${encodeURIComponent(filename)}`;
+        }
+       
 
         return `
-            <div class="col-sm-3 mb-1">
-                <div class="card bounce-card cursor-pointer shadow-sm" style="width: 18rem;">
+            <div class="col-sm-3">
+                <div class="card bounce-card cursor-pointer shadow-sm">
                     <div class="bg-light p-3">
                         <h2 class="text-center mt-2">📖</h2>
                     </div>
                     <div class="card-body">
                        <div class="p-2 border-bottom mb-1">
                             <span class="badge bg-success">${Utility.toTitleCase(book.category ?? 'N/a')}</span>
-                            <h6 class="card-title" title="${book.title}">${Utility.truncateText(book.title, 40)}</h6>
+                            <h6 class="card-title" title="${book.title}">${Utility.truncateText(book.title, 30)}</h6>
                             <p class="muted small" title="${book.author}">${Utility.truncateText(book.author, 40)}</p>
                        </div>
-                       <div class="w-100 d-flex gap-2 justify-content-end align-center">                          
+                       <div class="cards-footer">                          
                             <a class="btn btn-sm btn-primary" href="${viewerUrl}" target="_blank" class="rdl">
-                            📖 View PDF
+                            📖 <span class="hideonMobile">View PDF</span>
                             </a> 
-                        ${this.permission == 'admin' ? `
-                            <button class="btn btn-sm btn-light" data-action="edit" data-id="${book.id}"><i class="fas fa-pencil"></i></button>
+                        ${this.permission !== 'student' ? `
+                            <button class="btn btn-sm btn-light action-btn" data-action="edit" data-id="${book.id}"><i class="fas fa-pencil"></i></button>
 
-                            <button class="btn btn-sm btn-light" data-action="delete" data-id="${book.id}"><i class="fas fa-trash"></i></button>                            
+                            <button class="btn btn-sm btn-light action-btn" data-action="delete" data-id="${book.id}"><i class="fas fa-trash"></i></button>                            
                         
                     ` : ''}                              
                        </div>

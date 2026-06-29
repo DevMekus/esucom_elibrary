@@ -31,6 +31,7 @@ class EbookController{
         $required = ['title', 'author', 'category_id'];
         
         $data = RequestValidator::validate($required, $_POST);
+       
         $data = RequestValidator::sanitize($data);        
 
         $created = $this->service->create($data);
@@ -44,6 +45,7 @@ class EbookController{
         $required = ['title', 'author', 'category_id'];
         
         $data = RequestValidator::validate($required, $_POST);
+        
         $data = RequestValidator::sanitize($data);         
         $update = $this->service->update((int)$id, $data);
         Response::success($update, "Ebook updated");
