@@ -28,7 +28,7 @@ class EbookController{
     }
 
     public function store(){
-        $required = ['title', 'author', 'subject_id'];
+        $required = ['title', 'author', 'category_id'];
         
         $data = RequestValidator::validate($required, $_POST);
         $data = RequestValidator::sanitize($data);        
@@ -41,7 +41,7 @@ class EbookController{
     public function update(string $id){
         $id = RequestValidator::parseId($id);
 
-        $required = ['title', 'author', 'subject_id'];
+        $required = ['title', 'author', 'category_id'];
         
         $data = RequestValidator::validate($required, $_POST);
         $data = RequestValidator::sanitize($data);         

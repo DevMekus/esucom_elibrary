@@ -33,11 +33,11 @@ class EbookService{
     }
 
     private function validate(array $data){
-        if (!isset($data['title'], $data['access_url'], $data['author'])){
+        if (!isset($data['title'], $data['author'])){
             throw new ValidationFailedException('Ebook Information missing');
         }
 
-        if ($this->repo->exist($data['subject_id'], $data['title'])){
+        if ($this->repo->exist($data['category_id'], $data['title'])){
             throw new ResourceAlreadyExistsException("ebook already Exists");
         }
     }
@@ -64,7 +64,7 @@ class EbookService{
             $data['title'],
             $data['author'], 
             $ebookUrl,           
-            $data['subject_id'],          
+            $data['category_id'],          
         ]);
     }
 

@@ -119,13 +119,13 @@ class EbookRepository{
     public function create(array $ebook){
         try {
             $stmt = $this->connection->prepare(
-                "INSERT INTO {$this->table} (title, author, access_url, subject_id) 
-                VALUES (:title, :author, :access_url, :subject_id)"
+                "INSERT INTO {$this->table} (title, author, access_url, category_id) 
+                VALUES (:title, :author, :access_url, :category_id)"
             );
             $stmt->bindValue(':title', $ebook['title'], \PDO::PARAM_INT);
             $stmt->bindValue(':author', $ebook['author'], \PDO::PARAM_STR);
             $stmt->bindValue(':access_url', $ebook['access_url'], \PDO::PARAM_STR);
-            $stmt->bindValue(':subject_id', $ebook['subject_id'], \PDO::PARAM_STR);
+            $stmt->bindValue(':category_id', $ebook['category_id'], \PDO::PARAM_STR);
 
             $stmt->execute();
 
@@ -154,7 +154,7 @@ class EbookRepository{
                 SET title = :title, 
                     author = :author, 
                     access_url = :access_url, 
-                    subject_id = :subject_id, 
+                    category_id = :category_id, 
                     updated_at = NOW()
                 WHERE id = :id";
             
@@ -163,7 +163,7 @@ class EbookRepository{
             $stmt->bindValue(':title', $new['title'] ?? $prev['title']);
             $stmt->bindValue(':author', $new['author'] ?? $prev['author']);
             $stmt->bindValue(':access_url', $new['access_url'] ?? $prev['access_url']);
-            $stmt->bindValue(':subject_id', $new['subject_id'] ?? $prev['subject_id']);
+            $stmt->bindValue(':category_id', $new['category_id'] ?? $prev['category_id']);
             $stmt->bindValue(':id',  $prev['id']);
 
             return $stmt->execute();  
@@ -203,13 +203,13 @@ class EbookRepository{
     }
     
 
-    public function exist(string $subject_id, string $title){
+    public function exist(string $category_id, string $title){
         try {
             $smt = $this->connection->prepare(
-                "SELECT COUNT(*) FROM {$this->table} WHERE title = :title OR subject_id = :subject_id"
+                "SELECT COUNT(*) FROM {$this->table} WHERE title = :title OR category_id = :category_id"
                 );
             $smt->bindParam(':title', $title, \PDO::PARAM_STR);
-            $smt->bindParam(':subject_id', $subject_id, \PDO::PARAM_STR);
+            $smt->bindParam(':category_id', $category_id, \PDO::PARAM_STR);
             $smt->execute();
             
         return $smt->fetchColumn() > 0;

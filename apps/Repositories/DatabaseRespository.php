@@ -20,17 +20,17 @@ class DatabaseRespository{
     }
 
     private function buildFilters(array $filters){
-        $conditions = ["o.deleted_at IS NULL"];
+        $conditions = [];
         $params = [];       
 
         if (!empty($filters['search'])){
-            $conditions[] = "o.customer_name LIKE :search";
+            $conditions[] = "d.db_name  LIKE :search";
             $params[':search'] = '%' . $filters['search'] . '%';
 
         }
 
         if (!empty($filters['id'])){
-            $conditions[] = "o.id = :id";
+            $conditions[] = "d.id = :id";
             $params[':id'] = $filters['id'];
         }
 
@@ -52,8 +52,8 @@ class DatabaseRespository{
         $filterData = $this->buildFilters($filters);
 
         $result = $paginator->paginate([
-            'table' => $this->table . ' o',
-            'column' => 'o.id',
+            'table' => $this->table . ' d',
+            'column' => 'd.id',
             'cursor' => $cursor,
             'direction' =>  $direction,
             'filters' => $filterData['sql'],
@@ -81,7 +81,9 @@ class DatabaseRespository{
         $placeholders = implode(',', array_fill(0, count($dataIds), '?'));
 
         $query = "
-            
+            SELECT d.* FROM {$this->table} AS d
+            WHERE d.id  IN ($placeholders)
+            ORDER BY d.db_name ASC
         ";
 
         $stmt = $this->connection->prepare($query);
@@ -104,10 +106,8 @@ class DatabaseRespository{
                 $output[$Id] = [
                     'id' => $Id,
                     'name' => $row['db_name'],
-                    'url' => $row['access_url'],
-                    'subjectId' => $row['subject_id'],
-                    'is_active' => $row['is_active'],                   
-                    'updated_at' => $row['updated_at'],                   
+                    'url' => $row['access_url'],                   
+                    'is_active' => $row['is_active'],
                 ];
             }            
         }

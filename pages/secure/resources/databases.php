@@ -1,8 +1,9 @@
 <?php
+require_once ROOT_PATH . '/includes/appHeader.php';
 require_once ROOT_PATH . '/includes/header.php';
 include "navbar.php";
 ?>
-<body class="app-layout">
+<body class="app-layout" data-page='database' data-permission='<?= $user['role']; ?>'>
     
     <section class="container mt-4">
         <div class="page-title">
@@ -12,28 +13,15 @@ include "navbar.php";
       <div class="filter-group bg-light p-3 w-100 d-flex gap-2 r mb-3">
             <div class="input-group w-25">
                 <span class="input-group-text" id="basic-addon1">🔍</span>
-                <input type="text" class="form-control" placeholder="Search databases" aria-label="Username" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search databases" aria-label="Username" aria-describedby="basic-addon1">
             </div>
-           
+           <button class="btn btn-sm btn-primary" id="searchBtn">🔍 Search</button>
         </div>
-        <section class="row">
-            <div class="col-sm-3">
-                <div class="card shadow-sm" style="width: 18rem;">
-                    <div class="bg-primary p-3">
-                        <h2 class="text-center mt-2">🗄️</h2>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Taylor & Francis Collections</h5>
-                       
-                        <button  class="btn btn-primary btn-sm">⚡ Access</button>
-                    </div>
-                </div>
-            </div>
-            
-        </section>
-        <section class="w-100 d-flex gap-3 justify-content-center mt-4">
-            <button class="page-link btn btn-sm">Previous</button>
-            <button class="page-link btn btn-sm btn-primary">Next</button>
+        <section class="row" id="card_row"> 
+        </section>       
+        <section class="w-100 d-flex gap-3 justify-content-center mt-4" id="pagination">
+            <button class="page-link btn btn-sm" id="prevBtn">Previous</button>
+            <button class="page-link btn btn-sm" id="nextBtn">Next</button>
         </section>
     </section>
  <?php require "footer.php" ?>

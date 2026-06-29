@@ -1,8 +1,9 @@
 <?php
+require_once ROOT_PATH . '/includes/appHeader.php';
 require_once ROOT_PATH . '/includes/header.php';
 include "navbar.php";
 ?>
-<body class="app-layout" data-page='journal' data-permission='student'>
+<body class="app-layout" data-page='journal' data-permission='<?= $user['role']; ?>'>
     
     <section class="container mt-4">
         <div class="page-title">

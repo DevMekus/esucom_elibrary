@@ -13,7 +13,7 @@ class UserService {
     private UserRepository $repo;
     private PDO $db;
     private  LogService $logging;
-    public  $new_session;
+    public  array $new_session;
 
     public function __construct() {
         $this->db = Database::connect();
@@ -23,7 +23,7 @@ class UserService {
 
    
 
-    public function paginateOrders(?int $cursor, string $direction = 'next', $filters ): array{
+    public function paginateOrders(?int $cursor, string $direction = 'next',array  $filters ): array{
         //validate direction
         if (!in_array($direction, ['next', 'prev'])){
             $direction = 'next';
@@ -56,7 +56,7 @@ class UserService {
     }
 
 
-    public function hashPassword($plainPassword){
+    public function hashPassword(string $plainPassword){
         if (strlen($plainPassword) < 3) {
             throw new \InvalidArgumentException("Password too short");
         }
@@ -66,20 +66,19 @@ class UserService {
 
 
 
-    public function verifyPassword($password, $passwordHash){
+    public function verifyPassword(string $password, string $passwordHash){
        
         return password_verify($password, $passwordHash);
     }
 
 
-    public function generateSessionToken($account){
+    public function generateSessionToken(array $account){
         //generate and save
 
         $token = AuthMiddleware::generateToken([
             'userid' => $account['userid'],
             'role' => $account['role'],
-            'roleId' => $account['role_id'],
-            'branchId' => $account['branch_id'],
+            'roleId' => $account['role_id'],           
             'exp' => time() + 3600 + (12 * 60 * 60) //-> 12 hours //7200 seconds = 2 hours
         ]);
 
@@ -89,6 +88,9 @@ class UserService {
             'ip_address' => Utility::getUserIP(),
             'device' => Utility::getUserDevice(),
         ];
+
+        //Save a session here
+        $this->repo->saveNewSession($this->new_session);
 
         return $token;
     }
@@ -121,12 +123,11 @@ class UserService {
     
     
 
-    public function create($data){
+    public function create(array $data){
 
         if (!isset($data['email_address'], $data['role_id'], $data['user_password'])){
              throw new ValidationFailedException("Missing fields");
-        }     
-        
+        } 
 
         if($this->register($data)){
             
@@ -142,7 +143,7 @@ class UserService {
       
     }
 
-    private function register($data): ?int {            
+    private function register(array $data): ?int {            
 
         try {
             $this->db->beginTransaction();
@@ -151,17 +152,13 @@ class UserService {
           
             $lastInserId = $this->registerAccount($data, $userId);
 
-            $this->registerProfile($data, $lastInserId);
-
-            $logging = [
-                'branch_id' => $data['branch_id'] ?? null,
+            $this->registerProfile($data, (int)$lastInserId);
+            $this->logging->create([               
                 'type' => 'registration',
                 'title' => 'user registration successful',
                 'status' => true,
                 'userid'=> $userId
-            ];
-
-            $this->logging->create($logging);
+            ]);
             
 
             $this->db->commit();
@@ -180,38 +177,36 @@ class UserService {
         }
     }  
 
-    private function registerProfile($data, $lastInserId){
+    private function registerProfile(array $data, int $lastInserId){
+
        $profileImage = $this->uploadImage();
 
         $userProfile = [
             'account_id' => $lastInserId,                
             'fullname' => $data['fullname'],                
             'address' => $data['address'] ?? null,
-            'city' => $data['city'] ?? null,
-            'city_state' => $data['city_state'] ?? null,               
+            'department' => $data['department'] ?? null,
+            'level' => $data['level'] ?? null,               
             'avatar' => $profileImage,        
         ];
-        $this->repo->insertProfile($userProfile);
+        return $this->repo->insertProfile($userProfile);
     }
     
     
-    private function registerAccount($data, $userId){
+    private function registerAccount(array $data, string $userId){
         
        $hashedPassword = $this->hashPassword($data['user_password']);
 
-        $acountInfo = [
-            'userid' => $userId,
-            'branch_id' => $data['branch_id'] ?? null,
+       return  $this->repo->insertAccount([
+            'userid' => $userId,           
             'email_address' => $data['email_address'],
             'user_password' => $hashedPassword,
             'phone' => $data['phone'] ?? null,
             'role_id' => (int) $data['role_id'],            
-        ];
-
-       return  $this->repo->insertAccount($acountInfo); //returning lastInsertId
+        ]); //returning lastInsertId
     }
 
-    public function requestPasswordReset($user)  {
+    public function requestPasswordReset(array $user)  {
         $resetToken = bin2hex(random_bytes(16));
         $resetTokenExpiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
@@ -228,7 +223,7 @@ class UserService {
 
 
 
-    public function changePassword($user, string $newPassword) {
+    public function changePassword(array $user, string $newPassword) {
         
         $update = [
             'user_password' => $newPassword,
@@ -240,7 +235,7 @@ class UserService {
     
     }
 
-    private function updateProfileImage($user){
+    private function updateProfileImage(array $user){
         $image = $user['avatar'];
 
         if (
@@ -271,7 +266,7 @@ class UserService {
         return $image;
     }
 
-    public function update($id, $data){
+    public function update(int $id, array $data){
         if (!$id){
             throw new \InvalidArgumentException("User ID required");
         }
@@ -287,7 +282,6 @@ class UserService {
         $image = $this->updateProfileImage($user);
 
         $account = [
-            'branch_id' => $data['branch_id'] ?? $user['branch_id'],
             'email_address' => $data['email_address'] ?? $user['email_address'],
             'phone' => $data['phone'] ?? $user['phone'],
             'role_id' => $data['role_id'] ?? $user['role_id'],
@@ -297,22 +291,10 @@ class UserService {
         $profile = [
             'fullname' => $data['fullname'] ?? $user['fullname'],
             'address' => $data['address'] ?? $user['address'],
-            'city' => $data['city'] ?? $user['city'],
-            'city_state' => $data['state'] ?? $user['state'],
+            'department' => $data['department'] ?? $user['department'],
+            'level' => $data['level'] ?? $user['level'],
             'avatar' => $image,
-        ];
-
-       
-        
-        $logging = [
-                'branch_id' => $account['branch_id'] ?? null,
-                'type' => 'update',
-                'title' => 'Account update successful',
-                'status' => true,
-                'userid' => $user['userid']
-            ];
-
-           
+        ]; 
 
         try {        
 
@@ -320,7 +302,12 @@ class UserService {
 
                 $this->repo->updateAccount($user, $account);
                 $this->repo->updateProfile($user['id'], $profile);
-                $this->logging->create($logging);
+                $this->logging->create([                 
+                    'type' => 'update',
+                    'title' => 'Account update successful',
+                    'status' => true,
+                    'userid' => $user['userid']
+                ]);
 
             $this->db->commit();
             return true;
@@ -365,16 +352,7 @@ class UserService {
             if (file_exists($target_dir)) {
                 unlink($target_dir);
             }
-        }        
-
-        $logging = [
-            'branch_id' => $account['branch_id'] ?? null,
-            'type' => 'delete',
-            'title' => 'user deleted acccount successful',
-            'status' => true,
-            'userid' => $user['userid']
-        ];
-
+        }   
 
         if (isset($filter['userid'])){
             $id = $filter['userid'];
@@ -386,7 +364,12 @@ class UserService {
         try {
             $this->db->beginTransaction();
                 $this->repo->deleteUser($id);
-                $this->logging->create($logging);
+                $this->logging->create([           
+                    'type' => 'delete',
+                    'title' => 'user deleted acccount successful',
+                    'status' => true,
+                    'userid' => $user['userid']
+                ]);
             $this->db->commit();
             return true;
 
@@ -403,106 +386,11 @@ class UserService {
         
 
     }
-
-    public function userAnalytics($filter){
-        
-        $params = [
-            ':b' => $filter['branch_id']
-        ];
-
-        $userQuery = "
-            SELECT
-            COUNT(*) as accounts,
-            SUM(CASE WHEN a.role_id = '1' THEN 1 ELSE 0 END) as customers,
-            SUM(CASE WHEN a.role_id = '2' THEN 1 ELSE 0 END) as manager,
-            SUM(CASE WHEN a.role_id = '3' THEN 1 ELSE 0 END) as cashiers
-            FROM accounts_tbl a            
-        ";
-
-        if (!empty($filter['branch_id'])){
-            $userQuery .= " WHERE a.branch_id = :b";
-        }
-
-        $userStmt = $this->db->prepare($userQuery);
-
-        if (!empty($filter['branch_id'])){
-            $userStmt->bindValue(":b", (int) $filter['branch_id']);
-        }
-        
-
-        $userStmt->execute();
-        $data = $userStmt->fetch(\PDO::FETCH_ASSOC);
-
-        return [
-            'total_users' => (int) ($data['accounts'] ?? 0),
-            'total_customers' => (int) ($data['customers'] ?? 0),
-            'total_cashiers' => (int) ($data['cashiers'] ?? 0),
-            'total_managers' => (int) ($data['managers'] ?? 0),
-        ];
-    }
+    
 
     public static function sendGuestMessage(array $data)
     {
          return EmailServices::sendContactusMessageToAdmin($data);
     }
-
-
-    public function accountMigration(){
-        $accountOld = 'accounts_tbl_old';
-        $userOld = 'users_old';
-
-        
-
-        $query = "
-            SELECT a.*,
-            u.userid,
-            u.fullname,
-            u.email_address,
-            u.phone,
-            u.user_password,
-            u.address,
-            u.city,
-            u.city_state,
-            u.avatar
-
-            FROM {$accountOld} AS a
-            LEFT JOIN {$userOld} AS u on u.userid = a.userid
-            ORDER BY a.created_at ASC
-        
-        ";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();       
-        $data =  $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        //  echo json_encode($data); exit;
-
-        foreach ($data as $d) {
-            $acountInfo = [
-                'userid' => $d['userid'],
-                'branch_id' => 1,
-                'email_address' => $d['email_address'],
-                'user_password' => $d['user_password'],
-                'phone' => $d['phone'] ?? null,
-                'role_id' => (int) $d['role_id'],            
-            ];
-
-          
-
-            $lastInserId = $this->repo->insertAccount($acountInfo); 
-
-           
-
-            $userProfile = [
-                'account_id' => $lastInserId,                
-                'fullname' => $d['fullname'],                
-                'address' => $d['address'] ?? null,
-                'city' => $d['city'] ?? null,
-                'city_state' => $d['city_state'] ?? null,               
-                'avatar' => $d['avatar'] ?? null,        
-            ];
-            $this->repo->insertProfile($userProfile);
-        }
-
-        return true;
-    }
+    
 }

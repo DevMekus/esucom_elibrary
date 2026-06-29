@@ -1,6 +1,7 @@
 import EbookUI from "../ui/EbookUI.js";
 import Utility from "../core/Utility.js";
 import EbookService from "../services/EbookService.js";
+import { ApiClient } from "../core/ApiClient.js";
 
 
 export default class EbookController {
@@ -109,6 +110,28 @@ export default class EbookController {
 
         Utility.el("category_id").addEventListener('change', async(e)=>{
             await EbookController.initializeData();
+        })
+
+        /**Add new book */
+        Utility.el("addEbookForm").addEventListener('submit', async(e) => {
+            e.preventDefault()
+            const data = new FormData(e.target);
+            
+            const result = await Utility.confirm("Add new eBook?")
+            
+            if (!result.isConfirmed){
+                Utility.toast("Action cancelled");
+                return;
+            }
+
+            const isCreated = await EbookService.postNewEbook(data)
+
+            if (!isCreated){
+                Utility.toast('Creation failed. An error occurred')
+                return
+            }
+            
+            Utility.reloadPage() 
         })
 
        

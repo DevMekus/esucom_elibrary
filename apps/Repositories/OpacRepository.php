@@ -16,11 +16,11 @@ class OpacRepository{
 
 
     private function buildFilters(array $filters){
-        $conditions = ["o.deleted_at IS NULL"];
+        $conditions = [];
         $params = [];       
 
         if (!empty($filters['search'])){
-            $conditions[] = "o.customer_name LIKE :search";
+            $conditions[] = "o.author LIKE :search OR o.title LIKE :search OR o.publisher LIKE :search";
             $params[':search'] = '%' . $filters['search'] . '%';
 
         }
@@ -74,7 +74,13 @@ class OpacRepository{
         $placeholders = implode(',', array_fill(0, count($dataIds), '?'));
 
         $query = "
-            
+            SELECT o.*,
+            c.category
+
+            FROM {$this->table} AS o
+            LEFT JOIN category AS c ON c.id = o.category_id
+            WHERE o.id  IN ($placeholders)
+            ORDER BY o.category_id ASC
         ";
 
         $stmt = $this->connection->prepare($query);
@@ -90,7 +96,7 @@ class OpacRepository{
         $output = [];
 
         foreach ($rows as $row) {
-            $Id = $row['opac_id'];
+            $Id = $row['id'];
 
             // ✅ 1. Create Order ONCE
             if (!isset($output[$Id])) {
@@ -100,7 +106,8 @@ class OpacRepository{
                     'title' => $row['title'],
                     'accession_no' => $row['accession_no'],
                     'publisher' => $row['publisher'],
-                    'subject_id' => $row['subject_id'],
+                    'category' => $row['category'],
+                    'category_id' => $row['category_id'],
                     'publication_place' => $row['publication_place'],
                     'date_of_publication' => $row['date_of_publication'],
                     'call_number' => $row['call_number'],

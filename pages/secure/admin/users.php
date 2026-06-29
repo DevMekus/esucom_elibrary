@@ -1,13 +1,12 @@
 <?php
-require_once ROOT_PATH . '/includes/appHeader.php';
 require_once ROOT_PATH . '/includes/header.php';
 include "navbar.php";
 ?>
-<body class="app-layout" data-page='opac'  data-permission='<?= $user['role']; ?>'>
+<body class="app-layout" data-page='opac' data-permission='admin'>
     
     <section class="container mt-4">
         <div class="page-title">
-            <h3>🔖 OPAC — Physical Catalog</h3>
+            <h3>🔖 Users & Accounts</h3>
             <p>Search all 103 physical items · real-time availability & shelf locations</p>
         </div>
       <div class="filter-group bg-light p-3 w-100 d-flex gap-2 r mb-3">
@@ -17,15 +16,15 @@ include "navbar.php";
             </div>
             <select class="form-select w-25" id="category_id">
                 <option value="null">All Categories</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option value="1">Students</option>
+                <option value="2">Admins</option>
+               
             </select>
            <button class="btn btn-sm btn-primary" id="searchBtn">🔍 Search</button>
         </div>
         <section class="row">
             <div class="col-sm-12">
-                <div class="card shadow-sm p-4">
+                <div class="card shadow-sm p-4 table-responsive">
                    <table class="table table-striped table-hover">
                         <thead>
                             <tr>
@@ -44,12 +43,13 @@ include "navbar.php";
                     </table>
                 </div>
             </div>
+            <section class="w-100 d-flex gap-3 justify-content-center mt-4" id="pagination">
+                <button class="page-link btn btn-sm" id="prevBtn">Previous</button>
+                <button class="page-link btn btn-sm" id="nextBtn">Next</button>
+            </section>
             
         </section>
-        <section class="w-100 d-flex gap-3 justify-content-center mt-4" id="pagination">
-            <button class="page-link btn btn-sm" id="prevBtn">Previous</button>
-            <button class="page-link btn btn-sm" id="nextBtn">Next</button>
-        </section>
+       
     </section>
  <?php require "footer.php" ?>
 <?php require_once ROOT_PATH . '/includes/footer.php'; ?>

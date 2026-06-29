@@ -2,7 +2,6 @@
   use App\Utils\Utility;
   $current = Utility::currentRoute();
   $parts = explode("/", trim($current, "/"));
-
   $route = $parts[3] ?? null;
 ?>
 
@@ -12,7 +11,7 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse w-100 d-flex justify-content-between" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link <?= $route == "index" ? 'active' : '' ?>" aria-current="page" href="index">Overview</a>
@@ -29,8 +28,18 @@
         <li class="nav-item">
           <a class="nav-link <?= $route == "catalog" ? 'active' : '' ?>" href="catalog">OPAC Catalog</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link <?= $route == "users" ? 'active' : '' ?>" href="users"><i class="fas fa-users"></i> Accounts</a>
+        </li>
+        <li class="nav-item">
+         
+        </li>
        
       </ul>
+      <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-default <?= $route == "notifications" ? 'active' : '' ?>" href="notifications"><i class="fas fa-bell"></i> </a>
+        <a href="<?= BASE_URL ?>" class="btn btn-error btn-sm"><i class="fas fa-power-off"></i>Logout</a>
+      </div>
     </div>
   </div>
 </nav>

@@ -2,8 +2,8 @@ import Utility from "../core/Utility.js";
 import { ApiClient } from "../core/ApiClient.js";
 
 
-export default class EbookService {
-    static ebooks = null;
+export default class DatabaseService {
+    static database = null;
     static loading = false;
     static nextCursor = null;
     static prevCursor = null;
@@ -38,15 +38,15 @@ export default class EbookService {
     
             const { search, id } = this.filters;
             if (search !== 'null') params.append('search', search);
-            if (id !== 'null') params.append('id', id);
+           
            
 
-            const url = `/ebook?${params.toString()}`;
+            const url = `/database?${params.toString()}`;
             
             const payload = await ApiClient(url) 
             
             if (!payload.data || payload.data.data.length === 0){
-                this.ebooks = []  
+                this.database = []  
                 this.resetCursors();               
                 return;
             }
@@ -54,7 +54,7 @@ export default class EbookService {
             const results = payload.data?.data 
            
             if (direction === 'next' || direction === 'prev'){               
-                this.ebooks = results;
+                this.database = results;
             }   
 
             //update cursor
@@ -75,17 +75,6 @@ export default class EbookService {
         this.prevCursor = null;
         this.hasNext = false;
         this.hasPrev = false;
-    }
-
-    static async postNewEbook(data){
-        try {
-            
-            const response = await ApiClient('admin/ebook', data, "POST") 
-            return response.success
-
-        } catch (error) {
-            console.error('Fetch failed:', error);
-        }
     }
 
 

@@ -137,12 +137,12 @@
 
 .btn-error {
   background-color: var(--error);
-  color: var(--white);
+  color: var(--text-light);
   box-shadow: var(--btn-shadow);
 }
 
 .btn-error:hover {
-  background-color: var(--error-dark);
+  background-color: var(--error-dark-8);
 }
 
 .btn-outline-error {

@@ -551,12 +551,12 @@ a {
 
 .btn-error {
   background-color: var(--error);
-  color: var(--white);
+  color: var(--text-light);
   box-shadow: var(--btn-shadow);
 }
 
 .btn-error:hover {
-  background-color: var(--error-dark);
+  background-color: var(--error-dark-8);
 }
 
 .btn-outline-error {
@@ -772,6 +772,21 @@ input[type=reset] {
   position: relative;
   min-height: 100vh;
   background-color: var(--gray-100);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+}
+.filter-group input, .filter-group select {
+  width: 200px;
+  height: 45px;
+  border: 1px solid var(--primary);
+  outline: none;
+}
+.filter-group button {
+  height: 45px;
+  border-radius: 0px;
 }
 
 .nav-primary {

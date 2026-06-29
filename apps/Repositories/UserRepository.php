@@ -7,17 +7,17 @@ use PDO;
 class UserRepository {
     private string $accountTbl;
     private string $userTbl;
-    private string $rolesTbl;
+    private string $roles;
     private PDO $dbConnection;
     private string $sessionTbl;
 
     public function __construct(PDO $db)
     {
         $this->dbConnection = $db;
-        $this->accountTbl = '';
-        $this->userTbl = '';
-        $this->rolesTbl = '';
-        $this->sessionTbl =  '';
+        $this->accountTbl = Utility::$accounts_tbl;
+        $this->userTbl = Utility::$users_profile;
+        $this->roles = Utility::$roles;
+        
     }    
 
 
@@ -34,11 +34,7 @@ class UserRepository {
             $conditions[] = "a.id = :id";
             $params[':id'] = (int) $filters['id'];
         }
-
-        if (!empty($filters['branch_id'])) {
-            $conditions[] = "a.branch_id = :branch_id";
-            $params[':branch_id'] = (int) $filters['branch_id'];
-        }
+       
 
         if (!empty($filters['authenticate'])) {
             $conditions[] = "a.email_address = :auth OR a.phone = :auth";
@@ -104,13 +100,12 @@ class UserRepository {
 
         $query = "
             SELECT 
-                a.*,
-                b.branch_name,               
+                a.*,                          
                 u.account_id,
                 u.fullname,
-                u.home_address,
-                u.city,
-                u.city_state, 
+                u.home_address,                
+                u.department,                
+                u.level,                
                 u.avatar, 
                 r.role
 
@@ -118,10 +113,7 @@ class UserRepository {
             LEFT JOIN {$this->userTbl} u
                 ON a.id = u.account_id
 
-            LEFT JOIN branches b
-                ON a.branch_id = b.id
-
-            LEFT JOIN {$this->rolesTbl} r
+            LEFT JOIN {$this->roles} r
                 ON a.role_id = r.id
 
             WHERE a.id  IN ($placeholders)
@@ -150,15 +142,13 @@ class UserRepository {
                    $users[$sID] = [
                         'id' => $sID,
                         'userid' => $row['userid'],
-                        'branch_id' => $row['branch_id'],
-                        'branch_name' => $row['branch_name'],
                         'fullname' => $row['fullname'],
                         'email_address' => $row['email_address'],
                         'p_sx' => $row['user_password'],
                         'phone' => $row['phone'],
-                        'address' => $row['home_address'],
-                        'city' => $row['city'],
-                        'state' => $row['city_state'],
+                        'address' => $row['home_address'],                      
+                        'department' => $row['department'],                      
+                        'level' => $row['level'],                      
                         'avatar' => $row['avatar'],
                         'role' => $row['role'],                       
                         'status' => $row['status'],
@@ -179,10 +169,9 @@ class UserRepository {
       
         try {
             $stmt =  $this->dbConnection->prepare(
-                "INSERT INTO {$this->accountTbl} (userid, branch_id, email_address, user_password, phone, status, role_id) VALUES (:userid, :branch_id, :email_address, :user_password, :phone, :status, :role_id)"
+                "INSERT INTO {$this->accountTbl} (userid, email_address, user_password, phone, status, role_id) VALUES (:userid, :email_address, :user_password, :phone, :status, :role_id)"
             );
-            $stmt->bindValue(':userid', $account['userid'], \PDO::PARAM_STR);          
-            $stmt->bindValue(':branch_id', (int)$account['branch_id'], \PDO::PARAM_INT);          
+            $stmt->bindValue(':userid', $account['userid'], \PDO::PARAM_STR);
             $stmt->bindValue(':email_address', $account['email_address'], \PDO::PARAM_STR); 
             $stmt->bindValue(':user_password', $account['user_password'], \PDO::PARAM_STR); 
             $stmt->bindValue(':phone', $account['phone'], \PDO::PARAM_STR); 
@@ -218,8 +207,7 @@ class UserRepository {
                     role_id  = :role_id,
                     email_address  = :email_address,
                     user_password  = :user_password,
-                    phone  = :phone,
-                    branch_id  = :branch_id,
+                    phone  = :phone,                   
                     reset_token  = :reset_token,
                     reset_token_expiration  = :reset_token_expiration,
                     status  = :status 
@@ -227,7 +215,7 @@ class UserRepository {
                 WHERE userid = :id"
             );
            
-            $stmt->bindValue(':branch_id', $account['branch_id'] ?? $prev['branch_id']);
+            
             $stmt->bindValue(':role_id', $account['role_id'] ?? $prev['role_id']);
             $stmt->bindValue(':email_address', $account['email_address'] ?? $prev['email_address']);
             $stmt->bindValue(':user_password', $account['user_password'] ?? $prev['p_sx']);
@@ -253,16 +241,16 @@ class UserRepository {
     public function insertProfile(array $user){
         try {
             $stmt =  $this->dbConnection->prepare(
-                "INSERT IGNORE INTO {$this->userTbl} (account_id, fullname, home_address, city, city_state, avatar) 
-                VALUES (:account_id, :fullname, :home_address, :city, :city_state, :avatar)"
+                "INSERT IGNORE INTO {$this->userTbl} (account_id, fullname, home_address, department, level, avatar) 
+                VALUES (:account_id, :fullname, :home_address, :department, :level, :avatar)"
             );
             
             $stmt->bindValue(':account_id', (int)$user['account_id'], \PDO::PARAM_INT);           
             $stmt->bindValue(':fullname', $user['fullname'], \PDO::PARAM_STR);           
-            $stmt->bindValue(':home_address', $user['address'], \PDO::PARAM_STR);
-            $stmt->bindValue(':city', $user['city'], \PDO::PARAM_STR);
-            $stmt->bindValue(':city_state', $user['city_state'], \PDO::PARAM_STR);
+            $stmt->bindValue(':home_address', $user['address'], \PDO::PARAM_STR);           
             $stmt->bindValue(':avatar', $user['avatar'], \PDO::PARAM_STR);
+            $stmt->bindValue(':department', $user['department'], \PDO::PARAM_STR);
+            $stmt->bindValue(':level', $user['level'], \PDO::PARAM_STR);
 
             $stmt->execute();
 
@@ -279,7 +267,7 @@ class UserRepository {
         }
     }
 
-    public function updateProfile($accountId, array $profile){
+    public function updateProfile(string $accountId, array $profile){
 
         try {
              $stmt = $this->dbConnection->prepare(
@@ -287,16 +275,16 @@ class UserRepository {
                 SET 
                     fullname = :fullname,                    
                     home_address  = :uaddress,
-                    city  = :city,                   
-                    city_state  = :cstate,
+                    level  = :level,
+                    department  = :department, 
                     avatar  = :avatar                   
                 WHERE account_id = :id"
             );
             
             $stmt->bindValue(':fullname',  $profile['fullname']);
             $stmt->bindValue(':uaddress',  $profile['address']);
-            $stmt->bindValue(':city',  $profile['city']);
-            $stmt->bindValue(':cstate',  $profile['city_state']);
+            $stmt->bindValue(':level',  $profile['level']);
+            $stmt->bindValue(':department',  $profile['department']);           
             $stmt->bindValue(':avatar',  $profile['avatar']);
             $stmt->bindValue(':id', (int)$accountId);
 
@@ -307,7 +295,7 @@ class UserRepository {
         }
     }
 
-    public function saveNewSession($session){
+    public function saveNewSession(array $session){
         
         try {
             $stmt =  $this->dbConnection->prepare(
@@ -327,11 +315,11 @@ class UserRepository {
         }
     }
 
-    public function destroySession($id){
+    public function destroySession(string $id){
        
         try {
             $stmt = $this->dbConnection->prepare(
-                "DELETE FROM {$this->sessionTbl}  WHERE userid = :id"            
+                "UPDATE  {$this->sessionTbl} SET deleted_at = NOW() WHERE userid = :id"            
             );
             $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
             return $stmt->execute();
@@ -341,7 +329,7 @@ class UserRepository {
     }
 
 
-    public function deleteUser($id){
+    public function deleteUser(int $id){
        
         try {
             $stmt = $this->dbConnection->prepare(

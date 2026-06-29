@@ -30,6 +30,7 @@
       <form class="d-flex align-center" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
         <button class="btn btn-sm btn-secondary me-2" type="submit">Search</button>
+        <a  href="<?= BASE_URL ?>secure/resources/index" class="btn btn-sm btn-ghost">E-Resource</a>
         <a  href="auth/login" class="btn btn-sm btn-primary">Login</a>
       </form>
      

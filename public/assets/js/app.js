@@ -2,6 +2,8 @@ import { CONFIG } from "./core/Config.js"
 import Utility from "./core/Utility.js"
 import EbookController from "./controllers/EbookController.js";
 import JournalController from "./controllers/JournalController.js";
+import DatabaseController from "./controllers/DatabaseController.js";
+import OpacController from "./controllers/OpacController.js";
 
 const page = document.body.dataset.page;
 
@@ -16,6 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
         break;
         case 'journal':
             JournalController.init();
+        break;
+        case 'database':
+            DatabaseController.init();
+        break;
+        case 'opac':
+            OpacController.init();
         break;
     }
     

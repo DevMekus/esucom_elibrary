@@ -16,7 +16,11 @@ class Utility
     public static $notifications_tbl = 'notifications';
     public static $departments_tbl = 'departments';
     public static $category_tbl = 'category';
-    public static $logs = '';
+    
+    public static $logs = 'loginactivity';
+    public static $accounts_tbl = 'accounts_tbl';
+    public static $users_profile = 'users_profile';
+    public static $roles = 'roles';
 
     public static $recordLimit = 10;
 

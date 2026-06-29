@@ -7,23 +7,22 @@ use App\Services\UserService;
 
 class AuthController {
     private AuthService $authService;
-    private UserService $userService;
+   
 
     public function __construct()
     {
-        $this->authService = new AuthService();
-        $this->userService = new UserService();
+        $this->authService = new AuthService();      
     }
 
     public function login(){
         $data = RequestValidator::validate([
-            'login_cred' => 'required|min:3',
+            'email_address' => 'required|min:3',
             'user_password' => 'required|min:3',
         ]);
             
         $data = RequestValidator::sanitize($data);
 
-        $loggedIn = $this->authService->login($data['login_cred'], $data['user_password']);
+        $loggedIn = $this->authService->login($data['email_address'], $data['user_password']);
         if (!$loggedIn) Response::error(401, "Invalid login credentials");
 
         Response::success($loggedIn, "logging successful");

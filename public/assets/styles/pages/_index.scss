@@ -5,6 +5,23 @@
     background-color: var(--gray-100);
 }
 
+.filter-group{
+    display: flex;
+    align-items: center;
+
+    input, select {
+        width: 200px;
+        height: 45px;
+        border: 1px solid var(--primary);
+        outline: none;
+    }
+
+    button{
+        height: 45px;
+        border-radius: 0px;
+    }
+}
+
 .nav-primary {
     background-color: var(--primary);
     color: var(--text-light);

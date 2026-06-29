@@ -2,7 +2,6 @@
   use App\Utils\Utility;
   $current = Utility::currentRoute();
   $parts = explode("/", trim($current, "/"));
-
   $route = $parts[3] ?? null;
 ?>
 
@@ -29,9 +28,18 @@
         <li class="nav-item">
           <a class="nav-link <?= $route == "catalog" ? 'active' : '' ?>" href="catalog">OPAC Catalog</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link <?= $route == "users" ? 'active' : '' ?>" href="users"><i class="fas fa-users"></i> Accounts</a>
+        </li>
+        <li class="nav-item">
+         
+        </li>
        
       </ul>
-      <a href="<?= BASE_URL ?>" class="btn btn-secondary btn-sm">Go Home</a>
+      <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-default <?= $route == "notifications" ? 'active' : '' ?>" href="notifications"><i class="fas fa-bell"></i> </a>
+        <a href="<?= BASE_URL ?>" class="btn btn-error btn-sm"><i class="fas fa-power-off"></i>Logout</a>
+      </div>
     </div>
   </div>
 </nav>

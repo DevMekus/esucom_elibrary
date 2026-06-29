@@ -16,7 +16,7 @@ export default class EbookUI{
         return `
             <div class="col-sm-3 mb-1">
                 <div class="card bounce-card cursor-pointer shadow-sm" style="width: 18rem;">
-                    <div class="bg-accent p-3">
+                    <div class="bg-light p-3">
                         <h2 class="text-center mt-2">📖</h2>
                     </div>
                     <div class="card-body">
@@ -25,10 +25,16 @@ export default class EbookUI{
                             <h6 class="card-title" title="${book.title}">${Utility.truncateText(book.title, 40)}</h6>
                             <p class="muted small" title="${book.author}">${Utility.truncateText(book.author, 40)}</p>
                        </div>
-                       <div class="w-100 d-flex justify-content-end align-center">
-                        <a class="btn btn-sm btn-primary" href="${viewerUrl}" target="_blank" class="rdl">
-                        📖 View PDF
-                        </a>                          
+                       <div class="w-100 d-flex gap-2 justify-content-end align-center">                          
+                            <a class="btn btn-sm btn-primary" href="${viewerUrl}" target="_blank" class="rdl">
+                            📖 View PDF
+                            </a> 
+                        ${this.permission == 'admin' ? `
+                            <button class="btn btn-sm btn-light" data-action="edit" data-id="${book.id}"><i class="fas fa-pencil"></i></button>
+
+                            <button class="btn btn-sm btn-light" data-action="delete" data-id="${book.id}"><i class="fas fa-trash"></i></button>                            
+                        
+                    ` : ''}                              
                        </div>
                     </div>
                 </div>

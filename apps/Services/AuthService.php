@@ -46,25 +46,19 @@ class AuthService {
             }
 
             //Create and save new session
-            $session = $this->userService->generateSessionToken($user);
-            if(!$session){
+            $token = $this->userService->generateSessionToken($user);
+
+            if(!$token){
                 throw new ValidationFailedException('session token failed');            
             } 
 
-            $this->repo->saveNewSession($this->userService->new_session);
-
             //log
-            $logging = [
-                'branch_id' => $user['branch_id'] ?? null,
+            $this->logging->create([              
                 'type' => 'authentication',
                 'title' => "user logged in successfully",
                 'status' => true,
                 'userid'=> $user['userid']
-            ];            
-
-          
-
-            $this->logging->create($logging);
+            ]);
 
             $this->db->commit();
 
@@ -76,7 +70,7 @@ class AuthService {
                     'phone' => $user['phone'],
                     'address' => $user['address'],
                 ],
-                "token" => $session,
+                "token" => $token,
                 "refresh" => "",
             ];
 
@@ -84,9 +78,6 @@ class AuthService {
             $this->db->rollBack();
             throw new \RuntimeException("Service error while login user", 0, $e);
         }
-
-        
-
        
     }
 
@@ -106,16 +97,12 @@ class AuthService {
                 
             $this->repo->destroySession($userid);
 
-                $logging = [
-                    'branch_id' => $user['branch_id'],
+                $this->logging->create([                   
                     'type' => 'logout',
                     'title' => 'logout successful',
                     'status' => true,
                     'userid' => $user['userid']
-                ];
-
-
-                $this->logging->create($logging);
+                ]);
 
             $this->db->commit();
 
@@ -151,7 +138,6 @@ class AuthService {
     }
 
     public function resetPassword(string $token, string $newPassword){
-
     
         $getCursor = $this->repo->paginateOrders(null, 'next', ['token' => $token]);
       
@@ -165,16 +151,13 @@ class AuthService {
             $this->db->beginTransaction();
 
             $this->userService->changePassword($user, $newPassword);
-
-            $logging = [
-                'branch_id' => $user['branch_id'] ?? null,
+            
+            $this->logging->create([                
                 'type' => 'authentication',
                 'title' => 'Password reset successful',
                 'status' => true,
                 'userid' => $user['userid']
-            ];
-            
-            $this->logging->create($logging);
+            ]);
             $this->db->commit();
 
             return true;
