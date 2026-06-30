@@ -1,6 +1,7 @@
 import DatabaseService from "../services/DatabaseService.js";
 import Utility from "../core/Utility.js";
 import DatabaseUI from "../ui/DatabaseUI.js"
+import { ApiClient } from "../core/ApiClient.js";
 
 export default class DatabaseController {
 
@@ -57,7 +58,71 @@ export default class DatabaseController {
 
         container.innerHTML = dbUICards
         this.updateButtons()
+        this.editModal()
     }
+
+    static editModal(){
+        document.querySelectorAll('.action-btn')?.forEach(btn => {
+            btn.addEventListener('click', async() => {
+                const action = btn.dataset.action
+                const id = btn.dataset.id
+
+                const filtered = DatabaseService.database.find(d => d.id == id)
+
+                if (action == 'edit'){
+                    const name = document.getElementById('name')
+                    const url = document.getElementById('url')                  
+                    const databaseModal = document.querySelector('.databaseModal')
+
+                    Utility.el('submitBtn').textContent = 'Save Changes'
+                    Utility.el('titleDom').textContent = 'Edit'
+
+                    /**add values  */
+                    name.value = filtered.name;
+                    url.value = filtered.url;
+                    
+                    databaseModal.id = 'editDatabase';
+                    
+                    $("#databaseModal").modal("show")
+
+                    databaseModal.addEventListener('submit', async(e) => {
+                        e.preventDefault();
+                        const data = Utility.toObject(new FormData(e.target))            
+                        const result = await Utility.confirm("Update Database?")                        
+                        if (!result.isConfirmed){
+                            Utility.toast("Action cancelled");
+                            return;
+                        }                    
+                        const isUpdated = await ApiClient(`database/update/${id}`, data, "PATCH")                         
+                        Utility.SweetAlertResponse(isUpdated);
+                        if (!isUpdated.success){
+                            Utility.toast('Update failed. An error occurred')
+                            return
+                        }                        
+                        Utility.reloadPage() 
+                    })
+                }
+                if (action == 'delete'){
+                    const result = await Utility.confirm("Delete Database?")                        
+                    if (!result.isConfirmed){
+                        Utility.toast("Action cancelled");
+                        return;
+                    }                    
+                    const isDeleted = await ApiClient(`database/${id}`, {}, "DELETE")
+                    Utility.SweetAlertResponse(isDeleted);
+                    if (!isDeleted.success){
+                        Utility.toast('Delete failed. An error occurred')
+                        return
+                    }
+
+                    Utility.toast('Ebook Deleted','success');
+                    
+                    Utility.reloadPage() 
+                }
+            })
+        })
+    }
+    
     
     static updateButtons(){
         if (!DatabaseService.hasNext && !DatabaseService.hasPrev){
@@ -99,6 +164,42 @@ export default class DatabaseController {
             if (e.target.value == ''){
                 await DatabaseController.initializeData();
             }
+        })
+
+
+         /**Add new database */
+        Utility.el("addDatabaseForm").addEventListener('submit', async(e) => {
+            e.preventDefault()
+
+            const data = Utility.toObject(new FormData(e.target))
+            
+            const result = await Utility.confirm("Add new Research Database?")
+            
+            if (!result.isConfirmed){
+                Utility.toast("Action cancelled");
+                return;
+            }
+                        
+            const isCreated = await ApiClient('database/new', data, "POST")
+            console.log(isCreated)
+            Utility.SweetAlertResponse(isCreated)
+
+            if (!isCreated.success){
+                Utility.toast('Creation failed. An error occurred')
+                return
+            }
+            
+            Utility.reloadPage() 
+        })
+
+
+        Utility.el('newDatabaseBtn').addEventListener('click', (e) => {
+            const name = document.getElementById('name').value = ''
+            const url = document.getElementById('url').value = ''                  
+            const databaseModal = document.querySelector('.databaseModal')
+
+            Utility.el('submitBtn').textContent = 'Save Database'
+            Utility.el('titleDom').textContent = 'Add'
         })
 
        

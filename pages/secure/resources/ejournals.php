@@ -37,39 +37,39 @@ include "navbar.php";
     </section>
 
     <div class="modal fade" id="ejournalModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">📰 Add eJournal Subscription</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">📰 Add eJournal Subscription</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="eJournalModal" id="addJournalForm">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Journal Title *</label>
+                            <input type="text" class="form-control" name="title" id="title" placeholder="Eg: SAMDIC Book of Prenatal...">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="author" class="form-label">Subject Area</label>                
+                            <select class="form-select" aria-label="Default select example" name="department_id" id="ejDept_id">              
+                                <?php foreach($departments as $department):  ?>
+                                    <option value="<?= strtolower($department['id']) ?>"><?= strtoupper($department['department_name']) ?></option>
+                                <?php endforeach; ?>    
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="url" class="form-label">Access URL *</label>
+                            <input type="text" class="form-control" name="url" id="url" placeholder="Eg: https://journal.example.com">
+                        
+                        </div>
+                    </div>
+                    <div class="modal-footer w-100 d-flex justify-content-end">           
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Save eJournal</button>
+                    </div>
+            </form>
+            </div>
         </div>
-        <form class="eJournalModal" id="addJournalForm">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Journal Title *</label>
-                        <input type="text" class="form-control" name="title" id="title" placeholder="Eg: SAMDIC Book of Prenatal...">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="author" class="form-label">Subject Area</label>                
-                        <select class="form-select" aria-label="Default select example" name="department_id" id="ejDept_id">              
-                            <?php foreach($departments as $department):  ?>
-                                <option value="<?= strtolower($department['id']) ?>"><?= strtoupper($department['department_name']) ?></option>
-                            <?php endforeach; ?>    
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="url" class="form-label">Access URL *</label>
-                        <input type="text" class="form-control" name="url" id="url" placeholder="Eg: https://journal.example.com">
-                    
-                    </div>
-                </div>
-                <div class="modal-footer w-100 d-flex justify-content-end">           
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Save eJournal</button>
-                </div>
-        </form>
-        </div>
-    </div>
     </div>
  <?php require "footer.php" ?>
 <?php require_once ROOT_PATH . '/includes/footer.php'; ?>

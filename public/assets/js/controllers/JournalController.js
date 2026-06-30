@@ -175,7 +175,7 @@ export default class JournalController {
             await JournalController.initializeData();
         })
 
-         /**Add new book */
+        /**Add new book */
         Utility.el("addJournalForm").addEventListener('submit', async(e) => {
             e.preventDefault()
 

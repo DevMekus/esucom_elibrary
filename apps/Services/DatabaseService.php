@@ -33,11 +33,11 @@ class DatabaseService{
     }
 
     private function validate(array $data){
-        if (!isset($data['db_name'], $data['access_url'])){
+        if (!isset($data['name'], $data['url'])){
             throw new ValidationFailedException('Database Information missing');
         }
 
-        if ($this->repo->exist($data['db_name'], $data['access_url'])){
+        if ($this->repo->exist($data['name'], $data['url'])){
             throw new ResourceAlreadyExistsException("Database already Exists");
         }
     }
@@ -46,11 +46,9 @@ class DatabaseService{
     public function create(array $data){    
         $this->validate($data);
 
-        return $this->repo->create([
-            $data['subject_id'],
-            $data['db_name'],            
-            $data['access_url'],
-            true,
+        return $this->repo->create([           
+            'name' => $data['name'],            
+            'url' => $data['url'],
         ]);
     }
 
@@ -58,6 +56,7 @@ class DatabaseService{
         if (!isset($id)){
             throw new ValidationFailedException('Database Id required');
         }
+
         $getCursor = $this->paginateOrders(null, 'next', ['id' => $id]);
          
         if(!$getCursor || count($getCursor['data']) == 0){
@@ -66,7 +65,13 @@ class DatabaseService{
 
         $database = $getCursor['data'][0];
 
-        return $this->repo->update($database , $data);
+        $newDatabase = [
+            'id' =>  $id,
+            'name' => $data['name'] ?? $database['name'],
+            'url' => $data['url'] ?? $database['url'],
+        ];
+
+        return $this->repo->update($newDatabase);
     }
 
     public function delete(int $id){

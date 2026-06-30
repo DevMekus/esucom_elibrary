@@ -28,13 +28,12 @@ class DatabasesController{
     }
 
     public function store(){
-        $data = RequestValidator::validate([           
-            'subject_id' => 'required|min:1',
-            'db_name' => 'required|min:1',
-            'access_url' => 'required|min:1',           
+        $data = RequestValidator::validate([ 
+            'name' => 'required|min:1',
+            'url' => 'required|min:1',           
         ]);
             
-        $data = RequestValidator::sanitize($data);         
+        $data = RequestValidator::sanitize($data); 
 
         $created = $this->service->create($data);
 
@@ -45,9 +44,8 @@ class DatabasesController{
         $id = RequestValidator::parseId($id);
 
         $data = RequestValidator::validate([           
-            'subject_id' => 'required|min:1',
-            'db_name' => 'required|min:1',
-            'access_url' => 'required|min:1',          
+            'name' => 'required|min:1',
+            'url' => 'required|min:1',         
         ]);
         
         $data = RequestValidator::sanitize($data);         

@@ -107,7 +107,7 @@ class DatabaseRespository{
                     'id' => $Id,
                     'name' => $row['db_name'],
                     'url' => $row['access_url'],                   
-                    'is_active' => $row['is_active'],
+                    'is_active' => $row['is_active'] == '1' ? true : false,
                 ];
             }            
         }
@@ -119,13 +119,13 @@ class DatabaseRespository{
     public function create(array $database){
         try {
             $stmt = $this->connection->prepare(
-                "INSERT INTO {$this->table} (subject_id, db_name, access_url, is_active) 
-                VALUES (:subject_id, :db_name, :access_url, :is_active)"
+                "INSERT INTO {$this->table} (db_name, access_url, is_active) 
+                VALUES (:db_name, :access_url, :is_active)"
             );
-            $stmt->bindValue(':subject_id', $database['subject_id'], \PDO::PARAM_INT);
-            $stmt->bindValue(':db_name', $database['db_name'], \PDO::PARAM_STR);
-            $stmt->bindValue(':access_url', $database['access_url'], \PDO::PARAM_STR);
-            $stmt->bindValue(':is_active', $database['is_active'], \PDO::PARAM_STR);
+           
+            $stmt->bindValue(':db_name', $database['name'], \PDO::PARAM_STR);
+            $stmt->bindValue(':access_url', $database['url'], \PDO::PARAM_STR);
+            $stmt->bindValue(':is_active', true, \PDO::PARAM_STR);
 
             $stmt->execute();
 
@@ -148,23 +148,20 @@ class DatabaseRespository{
         }
     }
 
-    public function update(array $prev, array $new){
+    public function update(array $new){
         try {
             $query = "UPDATE {$this->table} 
-                SET subject_id = :subject_id, 
+                SET 
                     db_name = :db_name, 
-                    access_url = :access_url, 
-                    is_active = :is_active, 
-                    updated_at = NOW()
+                    access_url = :access_url
                 WHERE id = :id";
             
             $stmt = $this->connection->prepare($query);
 
-            $stmt->bindValue(':subject_id', $new['subject_id'] ?? $prev['subject_id']);
-            $stmt->bindValue(':db_name', $new['db_name'] ?? $prev['db_name']);
-            $stmt->bindValue(':access_url', $new['access_url'] ?? $prev['access_url']);
-            $stmt->bindValue(':is_active', $new['is_active'] ?? $prev['is_active']);
-            $stmt->bindValue(':id',  $prev['id']);
+           
+            $stmt->bindValue(':db_name', $new['name']);
+            $stmt->bindValue(':access_url', $new['url']);
+            $stmt->bindValue(':id',  $new['id']);
 
             return $stmt->execute();  
 
