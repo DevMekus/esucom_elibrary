@@ -16,7 +16,7 @@ include "navbar.php";
         </div>
       <div class="filter-group">
             <input type="text" id="searchInput" class="form-control" placeholder="Search databases" aria-label="Username" aria-describedby="basic-addon1">
-            <select class="form-select w-25" id="category_id">
+            <select class="form-select" id="category_id">
                 <option value="null">All Categories</option>
                 <?php foreach($categories as $category):  ?>
                 <option value="<?= strtolower($category['id']) ?>"><?= strtoupper($category['category']) ?></option>
@@ -32,7 +32,7 @@ include "navbar.php";
                 <div class="card shadow-sm p-4">
                    <table class="table table-striped table-hover">
                         <thead class="table-dark">
-                            <tr>
+                            <tr>                               
                                 <th scope="col">S/N</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Author</th>
@@ -40,7 +40,7 @@ include "navbar.php";
                                 <th scope="col">Category</th>
                                 <th scope="col">Publisher</th>
                                 <th scope="col">ISBN</th>
-                                <?= $user['role'] !== 'student' ? '<th scope="col">. . .</th>' : '' ?>                               
+                                <?= $user['role'] !== 'student' ? '<th scope="col">. . .</th>' : '' ?>                             
                             </tr>
                         </thead>
                         <tbody id="table_row">

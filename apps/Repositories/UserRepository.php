@@ -79,8 +79,7 @@ class UserRepository {
             'params' => $filterData['params'],
         ]);
 
-        $total_users = count($result['ids']);
-       
+        $total_users = count($result['ids']);       
 
         $fetch_result = empty($result['ids'])
                     ? []
@@ -108,11 +107,15 @@ class UserRepository {
                 u.department,                
                 u.level,                
                 u.avatar, 
-                r.role
+                r.role,
+                d.department_name
 
             FROM {$this->accountTbl} a
             LEFT JOIN {$this->userTbl} u
                 ON a.id = u.account_id
+
+            LEFT JOIN departments d
+                ON d.id = u.department
 
             LEFT JOIN {$this->roles} r
                 ON a.role_id = r.id
@@ -149,6 +152,7 @@ class UserRepository {
                         'phone' => $row['phone'],
                         'address' => $row['home_address'],                      
                         'department' => $row['department'],                      
+                        'department_name' => $row['department_name'],                      
                         'level' => $row['level'],                      
                         'avatar' => $row['avatar'],
                         'role' => $row['role'],                       

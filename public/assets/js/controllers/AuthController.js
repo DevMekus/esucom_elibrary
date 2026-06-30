@@ -55,9 +55,9 @@ export default class AuthController {
             //errro
             return
         }
-        
 
-        await AuthService.setNewProfile(UserService.users.data[0]);
+        
+        await AuthService.setNewProfile(UserService.users[0]);
        
         const intended_url = sessionStorage.getItem('intended_url');
 

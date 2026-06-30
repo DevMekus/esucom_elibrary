@@ -41,12 +41,13 @@ class UserController {
     }
    
 
-    public function store(){
-        $data = RequestValidator::validate([           
-            'email_address' => 'required|min:1',                
-        ]);
-        // $data = RequestValidator::validate([], $_POST);
-        $data = RequestValidator::sanitize($data);             
+    public function store(){      
+       
+        $required = ['email_address', 'fullname'];        
+        $data = RequestValidator::validate($required, $_POST);
+        $data = RequestValidator::sanitize($data);
+        
+        $data['user_password'] = '1234567';
 
         $created = $this->service->create($data);
 
@@ -56,10 +57,12 @@ class UserController {
 
     }
 
-    public function update(string $id){       
-        $data = RequestValidator::validate([], $_POST);
+    public function update(string $id){ 
+         
+        $required = ['email_address', 'fullname'];        
+        $data = RequestValidator::validate($required, $_POST);
         $data = RequestValidator::sanitize($data);             
-
+        
         $created = $this->service->update((int)$id, $data);
 
         if(!$created)Response::error(500, "An error has occurred");

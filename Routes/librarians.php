@@ -23,6 +23,7 @@ Router::group('v1', function () use ($user, $ebook, $ejournal, $database, $catal
     Router::add('DELETE', '/users/{id}', [$user, 'destroy']); #Admin deletes, no password
     Router::add('POST', '/users/{id}', [$user, 'destroyProfile']); #user deletes with password
     Router::add('POST', '/users/update/{id}', [$user, 'update']);
+    Router::add('POST', '/users/create/new', [$user, 'store']);
 
     #Ebook Routes
     Router::add('POST', '/ebook', [$ebook, 'store']); 

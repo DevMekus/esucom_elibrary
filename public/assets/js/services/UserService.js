@@ -42,16 +42,15 @@ export default class UserService {
             
             if (search !== 'null') params.append('search', search);         
             if (userid !== 'null') params.append('userid', userid);
-
-            let url = Utility.role == 'admin' ? `admin/users?${params.toString()}` : `users?userid=${userid}`;
+        
                
-            const payload = await ApiClient(url) 
+            const payload = await ApiClient(`users?${params.toString()}`) 
 
             if (Utility.role == 'admin'){
                 //set the analytics route too: just use the branch Ids
                 // const analytics = `/admin/analytics/users?${params.toString()}`
                 // await UserService._analytics(analytics)  
-            }
+            }            
             
             if (!payload.data || payload.data.data.length === 0){
                 this.users = []                

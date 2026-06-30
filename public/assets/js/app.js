@@ -5,6 +5,7 @@ import JournalController from "./controllers/JournalController.js";
 import DatabaseController from "./controllers/DatabaseController.js";
 import OpacController from "./controllers/OpacController.js";
 import AuthController from './controllers/AuthController.js';
+import UserController from "./controllers/UserController.js";
 
 const page = document.body.dataset.page;
 
@@ -29,6 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
         break;
         case 'auth':
             AuthController.init()
+        break;
+        case 'users':
+            UserController.init()
         break;
     }
     

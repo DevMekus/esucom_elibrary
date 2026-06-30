@@ -12,7 +12,7 @@ export default class EbookController {
         this.btnPrev = document.getElementById('prevBtn');
         this.initializeData()
         this.buttonEvents()
-        this.previewFile();
+        Utility.previewFile();
     }
 
     static async initializeData(){
@@ -219,32 +219,5 @@ export default class EbookController {
 
     }
 
-    static previewFile() {
-        const fileInput = document.getElementById("fileInput");
-        const preview = document.getElementById("filePreview");
-        fileInput.addEventListener("change", function () {
-            const file = this.files[0];
-            if (!file) return;
-            const fileType = file.type;
-            const fileName = file.name;
-            preview.innerHTML = "";
-            if (fileType === "application/pdf") {
-                const iframe = document.createElement("iframe");
-                iframe.src = URL.createObjectURL(file);
-                iframe.width = "100%";
-                iframe.height = "400px";
-                preview.appendChild(iframe);
-            } else if (
-                fileType === "application/msword" ||
-                fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ) {
-                const info = document.createElement("p");
-                info.textContent = `Selected Word document: ${fileName}`;
-                preview.appendChild(info);
-            } else {
-                preview.innerHTML = '<p style="color:red;">Unsupported file type</p>';
-                fileInput.value = "";
-            }
-        });
-    }
+    
 }

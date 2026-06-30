@@ -31,12 +31,10 @@ class UserService {
 
         $data = $this->repo->paginateOrders($cursor, $direction, $filters);
         // optional: add metadata layer (useful for frontend)
-        
 
-        return [
-            'success' => true,
-            'data' => $data,            
-        ];
+       unset($data['data'][0]['p_sx']);
+
+        return $data;
     }
 
     public function getById(string $id){
