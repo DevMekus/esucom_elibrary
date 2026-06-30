@@ -104,9 +104,7 @@ export default class EbookController {
                             return;
                         }
                     
-                        const isUpdated = await ApiClient(`update/ebook/${id}`, data, "POST")
-
-                        console.log(isUpdated)
+                        const isUpdated = await ApiClient(`update/ebook/${id}`, data, "POST")                     
 
                         if (!isUpdated.success){
                             Utility.toast('Creation failed. An error occurred')

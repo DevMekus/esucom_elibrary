@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\EbookController;
+use App\Controllers\JournalsController;
 use App\Controllers\UserController;
 use App\Routes\Router;
 use App\Middleware\UserOnlyMiddleware;
@@ -9,8 +10,9 @@ use App\Middleware\UserOnlyMiddleware;
 $user = new UserController();
 
 $ebook = new EbookController();
+$ejournal = new JournalsController();
 
-Router::group('v1', function () use ($user, $ebook) {
+Router::group('v1', function () use ($user, $ebook, $ejournal) {
    
     #User Routes
     Router::add('GET', '/users', [$user, 'index']);
@@ -23,5 +25,11 @@ Router::group('v1', function () use ($user, $ebook) {
     Router::add('POST', '/ebook', [$ebook, 'store']); 
     Router::add('POST', '/update/ebook/{id}', [$ebook, 'update']); 
     Router::add('DELETE', '/ebook/{id}', [$ebook, 'destroy']); 
+
+
+    #Journal Routes
+    Router::add('POST', '/ejournal/new', [$ejournal, 'store']); 
+    Router::add('PATCH', '/ejournal/update/{id}', [$ejournal, 'update']); 
+    Router::add('DELETE', '/ejournal/{id}', [$ejournal, 'destroy']); 
 
 }, [UserOnlyMiddleware::class]);

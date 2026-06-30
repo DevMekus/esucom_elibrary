@@ -1,6 +1,7 @@
 import JournalUI from "../ui/JournalUI.js";
 import JournalService from "../services/JournalService.js";
 import Utility from "../core/Utility.js";
+import { ApiClient } from "../core/ApiClient.js";
 
 export default class JournalController {
 
@@ -58,6 +59,72 @@ export default class JournalController {
 
         container.innerHTML = journalCards
         this.updateButtons()
+        this.editModal()
+    }
+
+    static editModal(){
+        document.querySelectorAll('.action-btn')?.forEach(btn => {
+            btn.addEventListener('click', async() => {
+                const action = btn.dataset.action
+                const id = btn.dataset.id
+
+        
+
+                const filtered = JournalService.journals.find(j => j.id == id)
+
+                if (action == 'edit'){
+                    const title = document.getElementById('title')                  
+                    const ejDept_id = document.getElementById('ejDept_id')
+                    const url = document.getElementById('url')                  
+                    const eJournalModal = document.querySelector('.eJournalModal')
+
+                    Utility.el('submitBtn').textContent = 'Save Changes'
+
+                    /**add values  */
+                    title.value = filtered.title;                 
+                    ejDept_id.value = filtered.department_id;
+                    url.value = filtered.url;
+                  
+                    eJournalModal.id = 'editEJournal';
+                    
+                    $("#ejournalModal").modal("show")
+
+                    eJournalModal.addEventListener('submit', async(e) => {
+                        e.preventDefault();
+                        const data = Utility.toObject(new FormData(e.target))            
+                        const result = await Utility.confirm("Update eJournal?")                        
+                        if (!result.isConfirmed){
+                            Utility.toast("Action cancelled");
+                            return;
+                        }                    
+                        const isUpdated = await ApiClient(`ejournal/update/${id}`, data, "PATCH")                         
+                        Utility.SweetAlertResponse(isUpdated);
+                        if (!isUpdated.success){
+                            Utility.toast('Creation failed. An error occurred')
+                            return
+                        }                        
+                        Utility.reloadPage() 
+                    })
+                }
+                if (action == 'delete'){
+                    const result = await Utility.confirm("Delete eJournal?")                        
+                    if (!result.isConfirmed){
+                        Utility.toast("Action cancelled");
+                        return;
+                    }                    
+                    const isDeleted = await ApiClient(`ejournal/${id}`, {}, "DELETE")
+                    Utility.SweetAlertResponse(isDeleted);
+                    if (!isDeleted.success){
+                        Utility.toast('Delete failed. An error occurred')
+                        return
+                    }
+
+                    Utility.toast('Ebook Deleted','success');
+                    
+                    Utility.reloadPage() 
+                }
+            })
+        })
     }
     
     static updateButtons(){
@@ -106,6 +173,30 @@ export default class JournalController {
 
         Utility.el("category_id").addEventListener('change', async(e)=>{
             await JournalController.initializeData();
+        })
+
+         /**Add new book */
+        Utility.el("addJournalForm").addEventListener('submit', async(e) => {
+            e.preventDefault()
+
+            const data = Utility.toObject(new FormData(e.target))
+            
+            const result = await Utility.confirm("Add new eJournal?")
+            
+            if (!result.isConfirmed){
+                Utility.toast("Action cancelled");
+                return;
+            }
+                        
+            const isCreated = await ApiClient('ejournal/new', data, "POST")
+            Utility.SweetAlertResponse(isCreated)
+
+            if (!isCreated.success){
+                Utility.toast('Creation failed. An error occurred')
+                return
+            }
+            
+            Utility.reloadPage() 
         })
 
         

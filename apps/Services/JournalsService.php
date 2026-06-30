@@ -51,7 +51,7 @@ class JournalsService{
         if (!isset($id)){
             throw new ValidationFailedException('Database Id required');
         }
-        $getCursor = $this->paginateOrders(null, 'next', ['id' => (int)$id]);
+        $getCursor = $this->paginateOrders(null, 'next', ['rowid' => (int)$id]);
          
         if(!$getCursor || count($getCursor['data']) == 0){
             throw new ResourceNotFoundException("Journal information failed to fetch");
@@ -59,7 +59,14 @@ class JournalsService{
 
         $journal = $getCursor['data'][0];
 
-        return $this->repo->update($journal , $data);
+        $newJournal = [
+            'id' => $id,
+            'url' => $data['url'] ?? $journal['url'],
+            'title' => $data['title'] ?? $journal['title'],
+            'department_id' => $data['department_id'] ?? $journal['department_id'],
+        ];
+
+        return $this->repo->update($newJournal);
     }
 
     public function delete(string $id){

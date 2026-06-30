@@ -29,6 +29,11 @@ class JournalsRepository{
             $params[':id'] = $filters['id'];
         }
 
+        if (!empty($filters['rowid'])){
+            $conditions[] = "j.id = :id";
+            $params[':id'] = $filters['rowid'];
+        }
+
         
         $sql = '';
 
@@ -129,13 +134,12 @@ class JournalsRepository{
     public function create(array $ebook){
         try {
             $stmt = $this->connection->prepare(
-                "INSERT INTO {$this->table} (title, author, access_url, subject_id) 
-                VALUES (:title, :author, :access_url, :subject_id)"
+                "INSERT INTO {$this->table} (department_id, title, access_url) 
+                VALUES ( :department_id, :title, :access_url)"
             );
-            $stmt->bindValue(':title', $ebook['title'], \PDO::PARAM_INT);
-            $stmt->bindValue(':author', $ebook['author'], \PDO::PARAM_STR);
-            $stmt->bindValue(':access_url', $ebook['access_url'], \PDO::PARAM_STR);
-            $stmt->bindValue(':subject_id', $ebook['subject_id'], \PDO::PARAM_STR);
+            $stmt->bindValue(':title', $ebook['title'], \PDO::PARAM_STR);            
+            $stmt->bindValue(':access_url', $ebook['url'], \PDO::PARAM_STR);
+            $stmt->bindValue(':department_id', $ebook['department_id'], \PDO::PARAM_INT);
 
             $stmt->execute();
 
@@ -159,23 +163,21 @@ class JournalsRepository{
     }
 
 
-    public function update(array $prev, array $new){
+    public function update(array $new){
         try {
             $query = "UPDATE {$this->table} 
                 SET  
-                    department_id  = :department_id ,
-                    title = :title,
-                    subject_id = :subject_id,
+                    department_id  = :department_id,
+                    title = :title,                  
                     access_url  = :access_url
-                WHERE journal_id = :id";
+                WHERE id = :id";
             
             $stmt = $this->connection->prepare($query);
 
-            $stmt->bindValue(':department_id', $new['department_id'] ?? $prev['department_id']);
-            $stmt->bindValue(':title', $new['title'] ?? $prev['title']);
-            $stmt->bindValue(':access_url', $new['access_url'] ?? $prev['access_url']);
-            $stmt->bindValue(':subject_id', $new['subject_id'] ?? $prev['subject_id']);
-            $stmt->bindValue(':id',  $prev['journal_id']);
+            $stmt->bindValue(':department_id', $new['department_id']);
+            $stmt->bindValue(':title', $new['title']);
+            $stmt->bindValue(':access_url', $new['url']);           
+            $stmt->bindValue(':id',  $new['id']);
 
             return $stmt->execute();  
 
@@ -194,7 +196,7 @@ class JournalsRepository{
     {
         try {
             $sql = "DELETE FROM {$this->table}                
-                WHERE journal_id = :id";
+                WHERE id = :id";
 
             $stmt = $this->connection->prepare($sql);
 

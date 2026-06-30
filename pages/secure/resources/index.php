@@ -13,8 +13,8 @@ include "navbar.php";
         <section class="mt-2">
             <div class="row">
                 <div class="col-sm-3">
-                    <div class="card shadow-sm" style="width: 18rem;">
-                        <div class="bg-accent p-3">
+                    <div class="card">
+                        <div class="bg-light p-3">
                             <h2 class="text-center mt-2">📚</h2>
                         </div>
                         <div class="card-body">
@@ -25,8 +25,8 @@ include "navbar.php";
                     </div>                    
                 </div>
                 <div class="col-sm-3">
-                    <div class="card shadow-sm" style="width: 18rem;">
-                        <div class="bg-primary p-3">
+                    <div class="card">
+                        <div class="bg-light p-3">
                             <h2 class="text-center mt-2">📰</h2>
                         </div>
                         <div class="card-body">
@@ -37,8 +37,8 @@ include "navbar.php";
                     </div>                    
                 </div>
                 <div class="col-sm-3">
-                    <div class="card shadow-sm" style="width: 18rem;">
-                        <div class="bg-success p-3">
+                    <div class="card">
+                        <div class="bg-light p-3">
                             <h2 class="text-center mt-2">🗄️</h2>
                         </div>
                         <div class="card-body">
@@ -49,8 +49,8 @@ include "navbar.php";
                     </div>                    
                 </div>
                 <div class="col-sm-3">
-                    <div class="card shadow-sm" style="width: 18rem;">
-                        <div class="bg-dark p-3">
+                    <div class="card">
+                        <div class="bg-light p-3">
                             <h2 class="text-center mt-2">🔖</h2>
                         </div>
                         <div class="card-body">

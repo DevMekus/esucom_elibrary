@@ -24,20 +24,20 @@ class JournalsController{
 
         //validate this array
         $result = $this->service->paginateOrders($cursor, $direction, $filters);
-        Response::success($result, "Ebook information");
+        Response::success($result, "eJournal information");
     }
 
     public function store(){
         $data = RequestValidator::validate([
             'title' => 'required|min:3',          
             'department_id' => 'required|min:1',            
-            'access_url' => 'required|min:1',
+            'url' => 'required|min:1',
         ]);
         $data = RequestValidator::sanitize($data);        
-
+    
         $created = $this->service->create($data);
 
-        Response::success($created, "Ebook saved");
+        Response::success($created, "eJournal saved");
     }
 
     public function update(string $id){
@@ -46,17 +46,17 @@ class JournalsController{
         $data = RequestValidator::validate([
             'title' => 'required|min:3',          
             'department_id' => 'required|min:1',            
-            'access_url' => 'required|min:1',
+            'url' => 'required|min:1',
         ]);
         $data = RequestValidator::sanitize($data);         
         $update = $this->service->update((int)$id, $data);
-        Response::success($update, "Ebook updated");
+        Response::success($update, "eJournal updated");
     }
 
     public function destroy(string $id){
         $id = RequestValidator::parseId($id);
         $delete = $this->service->delete((int)$id);       
-        Response::success($delete, "Ebook deleted");
+        Response::success($delete, "eJournal deleted");
     }
 
 }

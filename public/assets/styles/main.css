@@ -575,6 +575,10 @@ a {
   background-color: #D97706;
 }
 
+.btn-light {
+  border: 1px solid var(--accent) !important;
+}
+
 .btn-link {
   background: none;
   padding: 0;
