@@ -32,13 +32,12 @@ class OpacController{
             'author' => 'required|min:3',
             'title' => 'required|min:3',            
             'publisher' => 'required|min:1',
-            'subject_id' => 'required|min:1',
+            'category_id' => 'required|min:1',
             'publication_place' => 'required|min:1',
             'date_of_publication' => 'required|min:1',
             'call_number' => 'required|min:1',
             'serial_number' => 'required|min:1',
-            'shelve_number' => 'required|min:1',
-            
+            'shelve_number' => 'required|min:1',            
         ]);
             
         $data = RequestValidator::sanitize($data);         
@@ -55,12 +54,12 @@ class OpacController{
             'author' => 'required|min:3',
             'title' => 'required|min:3',            
             'publisher' => 'required|min:1',
-            'subject_id' => 'required|min:1',
+            'category_id' => 'required|min:1',
             'publication_place' => 'required|min:1',
             'date_of_publication' => 'required|min:1',
             'call_number' => 'required|min:1',
             'serial_number' => 'required|min:1',
-            'shelve_number' => 'required|min:1',
+            'shelve_number' => 'required|min:1',            
             
         ]);
         

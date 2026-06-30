@@ -3,6 +3,7 @@
 use App\Controllers\DatabasesController;
 use App\Controllers\EbookController;
 use App\Controllers\JournalsController;
+use App\Controllers\OpacController;
 use App\Controllers\UserController;
 use App\Routes\Router;
 use App\Middleware\UserOnlyMiddleware;
@@ -12,8 +13,9 @@ $user = new UserController();
 $ebook = new EbookController();
 $ejournal = new JournalsController();
 $database = new DatabasesController();
+$catalog = new OpacController();
 
-Router::group('v1', function () use ($user, $ebook, $ejournal, $database) {
+Router::group('v1', function () use ($user, $ebook, $ejournal, $database, $catalog) {
    
     #User Routes
     Router::add('GET', '/users', [$user, 'index']);
@@ -37,6 +39,11 @@ Router::group('v1', function () use ($user, $ebook, $ejournal, $database) {
     Router::add('POST', '/database/new', [$database, 'store']); 
     Router::add('PATCH', '/database/update/{id}', [$database, 'update']); 
     Router::add('DELETE', '/database/{id}', [$database, 'destroy']); 
+
+    #Database Routes
+    Router::add('POST', '/catalog/new', [$catalog, 'store']); 
+    Router::add('PATCH', '/catalog/update/{id}', [$catalog, 'update']); 
+    Router::add('DELETE', '/catalog/{id}', [$catalog, 'destroy']); 
 
     
 

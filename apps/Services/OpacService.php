@@ -60,6 +60,8 @@ class OpacService{
 
         $prevOpac = $getCursor['data'][0];
 
+        $updated = [];
+
         return $this->repo->update($prevOpac , $data);
     }
 

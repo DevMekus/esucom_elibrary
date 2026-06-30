@@ -167,7 +167,7 @@ export default class DatabaseController {
         })
 
 
-         /**Add new database */
+        /**Add new database */
         Utility.el("addDatabaseForm").addEventListener('submit', async(e) => {
             e.preventDefault()
 

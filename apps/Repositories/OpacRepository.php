@@ -125,14 +125,14 @@ class OpacRepository{
     public function create(array $opac){
         try {
             $stmt = $this->connection->prepare(
-                "INSERT INTO {$this->table} (author, title, accession_no, publisher, subject_id, publication_place, date_of_publication, call_number, serial_number, shelve_number, copies) 
-                VALUES (:author, :title, :accession_no, :publisher, :subject_id, :publication_place, :date_of_publication, :call_number, :serial_number, :shelve_number, :copies)"
+                "INSERT INTO {$this->table} (author, title, accession_no, publisher, category_id, publication_place, date_of_publication, call_number, serial_number, shelve_number, copies) 
+                VALUES (:author, :title, :accession_no, :publisher, :category_id, :publication_place, :date_of_publication, :call_number, :serial_number, :shelve_number, :copies)"
             );
             $stmt->bindValue(':author', $opac['author'], \PDO::PARAM_STR);
             $stmt->bindValue(':title', $opac['title'], \PDO::PARAM_STR);
             $stmt->bindValue(':accession_no', $opac['accession_no'], \PDO::PARAM_STR);
             $stmt->bindValue(':publisher', $opac['publisher'], \PDO::PARAM_STR);
-            $stmt->bindValue(':subject_id', $opac['subject_id'], \PDO::PARAM_INT);            
+            $stmt->bindValue(':category_id', $opac['category_id'], \PDO::PARAM_INT);            
             $stmt->bindValue(':publication_place', $opac['publication_place'], \PDO::PARAM_STR);
             $stmt->bindValue(':date_of_publication', $opac['date_of_publication'], \PDO::PARAM_STR);
             $stmt->bindValue(':call_number', $opac['call_number'], \PDO::PARAM_STR);
@@ -169,14 +169,14 @@ class OpacRepository{
                     title = :title,
                     accession_no = :accession_no,
                     publisher = :publisher,
-                    subject_id = :subject_id,
+                    category_id = :category_id,
                     publication_place = :publication_place,
                     date_of_publication = :date_of_publication,
                     call_number = :call_number,
                     serial_number = :serial_number,
                     shelve_number = :shelve_number,
                     copies = :copies
-                WHERE opac_id = :id";
+                WHERE id = :id";
             
             $stmt = $this->connection->prepare($query);
 
@@ -184,7 +184,7 @@ class OpacRepository{
             $stmt->bindValue(':title', $new['title'] ?? $prev['title']);
             $stmt->bindValue(':accession_no', $new['accession_no'] ?? $prev['accession_no']);
             $stmt->bindValue(':publisher', $new['publisher'] ?? $prev['publisher']);
-            $stmt->bindValue(':subject_id', $new['subject_id'] ?? $prev['subject_id']);
+            $stmt->bindValue(':category_id', $new['category_id'] ?? $prev['category_id']);
             $stmt->bindValue(':publication_place', $new['publication_place'] ?? $prev['publication_place']);
             $stmt->bindValue(':date_of_publication', $new['date_of_publication'] ?? $prev['date_of_publication']);
             $stmt->bindValue(':call_number', $new['call_number'] ?? $prev['call_number']);
@@ -211,7 +211,7 @@ class OpacRepository{
     {
         try {
             $sql = "DELETE FROM {$this->table}                
-                WHERE opac_id = :id";
+                WHERE id = :id";
 
             $stmt = $this->connection->prepare($sql);
 

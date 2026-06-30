@@ -33,12 +33,12 @@ export default class OpacUI{
                     <td>
                     ${row.serial_number}
                 </td>
-                ${this.permission == 'admin' ? `
+                ${this.permission !== 'student' ? `
                 <td>                  
                     <div class="d-flex gap-1">
-                        <button class="btn btn-sm btn-light" data-action="edit" data-id="${row.id}"><i class="fas fa-pencil"></i></button>
+                        <button class="btn btn-sm btn-light action-btn" data-action="edit" data-id="${row.id}"><i class="fas fa-pencil"></i></button>
 
-                        <button class="btn btn-sm btn-light" data-action="delete" data-id="${row.id}"><i class="fas fa-trash"></i></button>  
+                        <button class="btn btn-sm btn-light action-btn" data-action="delete" data-id="${row.id}"><i class="fas fa-trash"></i></button>  
                     </div>
                 </td>                          
                     
