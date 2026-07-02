@@ -18,8 +18,28 @@ class DepartmentService{
         $this->repo =  new DepartmentRepository($this->db);
     }
 
+    public function paginateOrders(?int $cursor, string $direction = 'next', $filters ): array{
+        //validate direction
+        if (!in_array($direction, ['next', 'prev'])){
+            $direction = 'next';
+        }
+
+        $data = $this->repo->paginateOrders($cursor, $direction, $filters);
+        // optional: add metadata layer (useful for frontend)
+
+        return $data;
+       
+    }
+
     public function getAll(){
         $department = $this->repo->findAll();
+        if(!$department || count($department) == 0) return null;
+
+        return $department;
+    }
+
+    public function getById(int $id){
+        $department = $this->repo->findById($id);
         if(!$department || count($department) == 0) return null;
 
         return $department;

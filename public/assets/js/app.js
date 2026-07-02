@@ -6,6 +6,8 @@ import DatabaseController from "./controllers/DatabaseController.js";
 import OpacController from "./controllers/OpacController.js";
 import AuthController from './controllers/AuthController.js';
 import UserController from "./controllers/UserController.js";
+import CategoryController from "./controllers/CategoryController.js";
+import DepartmentController from "./controllers/DepartmentController.js";
 
 const page = document.body.dataset.page;
 
@@ -33,6 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
         break;
         case 'users':
             UserController.init()
+        break;
+        case 'categories':
+            CategoryController.init()
+        break;
+        case 'departments':
+            DepartmentController.init()
         break;
     }
     

@@ -18,8 +18,28 @@ class CategoryService{
         $this->repo =  new CategoriesRepository($this->db);
     }
 
+    public function paginateOrders(?int $cursor, string $direction = 'next', $filters ): array{
+        //validate direction
+        if (!in_array($direction, ['next', 'prev'])){
+            $direction = 'next';
+        }
+
+        $data = $this->repo->paginateOrders($cursor, $direction, $filters);
+        // optional: add metadata layer (useful for frontend)
+
+        return $data;
+       
+    }
+
     public function getAll(){
         $categories = $this->repo->findAll();
+        if(!$categories || count($categories) == 0) return null;
+
+        return $categories;
+    }
+
+    public function getById(int $id){
+        $categories = $this->repo->findById($id);
         if(!$categories || count($categories) == 0) return null;
 
         return $categories;

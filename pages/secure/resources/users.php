@@ -5,7 +5,7 @@ include "navbar.php";
 
 ?>
 <body class="app-layout" data-page='users' data-userid='<?= $user['userid']; ?>'  data-permission='<?= $user['role']; ?>' data-role='<?= $user['role']; ?>'>
-        <div 
+    <div 
     id="departments" 
     class="mt-4"
     data-branches='<?= htmlspecialchars(json_encode($departments), ENT_QUOTES, 'UTF-8'); ?>'>
